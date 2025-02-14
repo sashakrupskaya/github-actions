@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.*;
 
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
@@ -26,7 +25,6 @@ public class OAuthClient {
     private static final String TOKEN_ENDPOINT = TestConfig.getTokenEndpoint();
     private static final String USERNAME = TestConfig.getUserName();
     private static final String PASSWORD = TestConfig.getPassword();
-    private static final String CONTENT_TYPE_VALUE = TestConfig.getContentTypeValue();
     private static final String GRANT_TYPE = TestConfig.getGrantType();
 
     private OAuthClient() {
@@ -41,7 +39,7 @@ public class OAuthClient {
         }
         return instance;
     }
-    // Gets the read token
+    // Get the read token
     public String getReadToken() throws IOException {
         if (readToken == null) {
             readToken = fetchToken("read");
@@ -49,7 +47,7 @@ public class OAuthClient {
         return readToken;
     }
 
-    // Gets the write token
+    // Get the write token
     public String getWriteToken() throws IOException {
         if (writeToken == null) {
             writeToken = fetchToken("write");
@@ -66,7 +64,7 @@ public class OAuthClient {
     private String fetchToken(String scope) throws IOException {
         HttpPost postRequest = new HttpPost(TOKEN_ENDPOINT);
         // Set header
-        postRequest.setHeader(HttpHeaders.CONTENT_TYPE, CONTENT_TYPE_VALUE);
+        postRequest.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
 
         // Set basic authentication header
         String basicAuth = Base64.getEncoder().encodeToString((USERNAME + ":" + PASSWORD).getBytes(StandardCharsets.UTF_8));

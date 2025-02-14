@@ -75,9 +75,6 @@ public class TestConfig {
     public static String getPassword() {
         return getProperty("userPassword");
     }
-    public static String getContentTypeValue() {
-        return getProperty("contentTypeValue");
-    }
     public static String getGrantType() {
         return getProperty("grantType");
     }
