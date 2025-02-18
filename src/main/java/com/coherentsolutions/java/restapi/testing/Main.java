@@ -1,17 +1,76 @@
 package com.coherentsolutions.java.restapi.testing;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.io.IOException;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        try {
+            OAuthClient client = OAuthClient.getInstance();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+            //GET request
+            String getUsers = client.sendGetRequest("http://localhost:49000/users");
+            System.out.println("GET Users: " + getUsers);
+//
+//
+//            //POST request
+//            String postUsers = client.sendWriteRequest("http://localhost:49000/users", "POST", "{\n" +
+//                    "  \"age\": 255,\n" +
+//                    "  \"name\": \"Tester22\",\n" +
+//                    "  \"sex\": \"MALE\",\n" +
+//                    "  \"zipCode\": \"test\"\n" +
+//                    "}");
+//
+
+            //PUT request
+//            String putUsers = client.sendWriteRequest("http://localhost:49000/users", "PUT", "{\n" +
+//                    "  \"age\": 100,\n" +
+//                    "  \"name\": \"Tester\",\n" +
+//                    "  \"sex\": \"FEMALE\",\n" +
+//                    "  \"zipCode\": \"ABCDE\"\n" +
+//                    "}");
+//
+
+//            //DELETE request
+//            String deleteUsers = client.sendWriteRequest("http://localhost:49000/users", "DELETE", "{\n" +
+//                    "  \"age\": 255,\n" +
+//                    "  \"name\": \"Tester22\",\n" +
+//                    "  \"sex\": \"MALE\",\n" +
+//                    "  \"zipCode\": \"ABCDE\"\n" +
+//                    "}");
+
+
+//            //PATCH request
+//            String patchUsers = client.sendWriteRequest("http://localhost:49000/users", "PATCH", "{\n" +
+//                    "  \"userNewValues\": {\n" +
+//                    "    \"age\": 33,\n" +
+//                    "    \"name\": \"updated\",\n" +
+//                    "    \"sex\": \"FEMALE\",\n" +
+//                    "    \"zipCode\": \"12345\"\n" +
+//                    "  },\n" +
+//                    "  \"userToChange\": {\n" +
+//                    "    \"age\": 34,\n" +
+//                    "    \"name\": \"Tester\",\n" +
+//                    "    \"sex\": \"FEMALE\",\n" +
+//                    "    \"zipCode\": \"12345\"\n" +
+//                    "  }\n" +
+//                    "}");
+//
+
+//            //POST request
+//            String postUsersUpload = client.sendWriteRequest("http://localhost:49000/users", "POST", "{[]}");
+//
+
+//            //GET request
+//            String getZipCodes = client.sendGetRequest("http://localhost:49000/zip-codes");
+//            System.out.println("GET Response: " + getZipCodes);
+
+            //POST request
+            String postUsersUpload = client.sendWriteRequest("http://localhost:49000/zip-codes/expand", "POST", "[]");
+            System.out.println("POST Response: " + postUsersUpload); //POST Response: ["12345","23456","ABCDE","test"]
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
