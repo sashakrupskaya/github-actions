@@ -57,7 +57,7 @@ public class OAuthClient {
 
     /**
      Receive a token using the credentials, grant_type
-     @param scope is for the token is requested ("read" or "write")
+     @param scope is for the token requested ("read" or "write")
      @return access token
      @throws IOException when the HTTP request fails
      */
@@ -88,23 +88,21 @@ public class OAuthClient {
     }
 
     // Send a GET request with the read token
-    public String sendGetRequest(String url) throws IOException {
+    public HttpResponse sendGetRequest(String url) throws IOException {
 
         HttpGet getRequest = new HttpGet(url);
         getRequest.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getReadToken());
 
         return httpClient.execute(getRequest, response -> {
             int statusCode = response.getCode();
-            if (statusCode == HttpStatus.SC_OK) {
-                return EntityUtils.toString(response.getEntity());
-            } else {
-                throw new IOException("GET request failed. HTTP Status: " + statusCode);
-            }
+            String responseBody = EntityUtils.toString(response.getEntity());
+            return new HttpResponse(statusCode, responseBody);
         });
     }
 
+
     // Send a POST, PUT, PATCH, or DELETE request with the write token
-    public String sendWriteRequest(String url, String method, String body) throws IOException {
+    public HttpResponse sendWriteRequest(String url, String method, String body) throws IOException {
         HttpUriRequestBase request;
         switch (method.toUpperCase()) {
             case "POST":
@@ -132,11 +130,8 @@ public class OAuthClient {
 
         return httpClient.execute(request, response -> {
             int statusCode = response.getCode();
-            if (statusCode == HttpStatus.SC_OK || statusCode == HttpStatus.SC_CREATED) {
-                return EntityUtils.toString(response.getEntity());
-            } else {
-                throw new IOException("Write request failed. HTTP Status: " + statusCode);
-            }
+            String responseBody = EntityUtils.toString(response.getEntity());
+            return new HttpResponse(statusCode, responseBody);
         });
     }
 }
