@@ -1,22 +1,39 @@
-# Rubric for Grading Task 20
-## Get Available Zip Codes and Add More to the List
+# Rubric for "Create User" Task
 
-### 1. **Test Coverage (40 Points Total)**
-   1. **Test Cases for Scenario #1 (10 Points)**: Ensure that test cases thoroughly cover the retrieval of available zip codes, including authorization checks and verification of the correct response code.
-   2. **Test Cases for Scenario #2 (10 Points)**: Develop test cases to validate the process of adding new zip codes, confirming successful additions and correct response codes.
-   3. **Test Cases for Scenario #3 (10 Points)**: Create test cases that address handling duplicate zip codes within the available list, ensuring duplicates are not present after the operation.
-   4. **Test Cases for Scenario #4 (10 Points)**: Develop test cases for managing duplicate zip codes between available and used lists, ensuring no duplicates exist post-operation.
+**Maximum Points: 100**
 
-### 2. **Bug Reporting (20 Points Total)**
-   1. **Clarity and Completeness (10 Points)**: Bug reports should be clear and comprehensive, including detailed steps to reproduce the issue, actual versus expected results, and logs if available.
-   2. **Identification of Issues (10 Points)**: Accurately identify and document all issues discovered during testing, providing complete and precise information.
+### Criteria
 
-### 3. **Documentation and Use of Swagger (10 Points Total)**
-   1. **Alignment with Swagger Documentation (10 Points)**: Ensure that test cases align with the Swagger documentation, demonstrating an understanding of the endpoints and parameters.
+1. **Understanding of User Creation Requirements (25 points)**
+   - Full understanding and correct implementation of the scenarios for user creation.
+   - Proper handling of all specified cases, including successful and error scenarios.
 
-### 4. **Code Quality and Organization (20 Points Total)**
-   1. **Readability and Maintainability (10 Points)**: The test code should be well-organized, with clear naming conventions and comments where necessary, enhancing readability and ease of maintenance.
-   2. **Reusability and Modularity (10 Points)**: Ensure that the test code is modular and reusable, minimizing duplication and promoting maintainability through well-structured components and functions.
+   - *25 points*: Demonstrates full understanding and correct implementation.
+   - *13-24 points*: Some understanding, but with minor errors.
+   - *0-12 points*: Lacks understanding or misapplies key concepts.
 
-### 5. **Execution and Result Validation (10 Points Total)**
-   1. **Accurate Execution and Result Validation (10 Points)**: Tests should be executed correctly, and results must be validated against expectations, demonstrating a comprehensive understanding of the application's zip code functionality.
+2. **Test Coverage (40 points)**
+   - Comprehensive test cases covering all scenarios for user creation functionality.
+   - Edge cases and negative scenarios are considered.
+
+   - *40 points*: Comprehensive coverage with no issues.
+   - *21-39 points*: Good coverage with minor issues or missed edge cases.
+   - *0-20 points*: Incomplete coverage with significant gaps.
+
+3. **Bug Reporting (20 points)**
+   - Clear and concise bug reports with detailed steps to reproduce, expected vs actual results, and logs where applicable.
+
+   - *20 points*: Detailed, clear, and well-structured bug reports.
+   - *10-19 points*: Some details missing or reports lack clarity.
+   - *0-9 points*: Incomplete or unclear bug reports.
+
+4. **Code Quality and Best Practices (15 points)**
+   - Clean, readable, and well-structured code following best practices.
+   - Proper use of version control and meaningful commit messages.
+
+   - *15 points*: Clean, well-structured, and adheres to best practices.
+   - *8-14 points*: Minor issues with structure or adherence to best practices.
+   - *0-7 points*: Poor code quality with significant issues.
+
+### Final Grade: 
+- Total points = [___/100]
