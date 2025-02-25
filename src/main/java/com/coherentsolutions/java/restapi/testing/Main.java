@@ -8,9 +8,12 @@ public class Main {
             OAuthClient client = OAuthClient.getInstance();
 
             //GET request
-            String getUsers = client.sendGetRequest("http://localhost:49000/users");
+            HttpResponse getUsers = client.sendGetRequest("http://localhost:49000/users");
             System.out.println("GET Users: " + getUsers);
-//
+            //GET request
+            HttpResponse getZipCodes = client.sendGetRequest("http://localhost:49000/zip-codes");
+            System.out.println("GET Response: " + getZipCodes);
+////
 //
 //            //POST request
 //            String postUsers = client.sendWriteRequest("http://localhost:49000/users", "POST", "{\n" +
@@ -60,13 +63,11 @@ public class Main {
 //            String postUsersUpload = client.sendWriteRequest("http://localhost:49000/users", "POST", "{[]}");
 //
 
-//            //GET request
-//            String getZipCodes = client.sendGetRequest("http://localhost:49000/zip-codes");
-//            System.out.println("GET Response: " + getZipCodes);
+//
 
-            //POST request
-            String postUsersUpload = client.sendWriteRequest("http://localhost:49000/zip-codes/expand", "POST", "[]");
-            System.out.println("POST Response: " + postUsersUpload); //POST Response: ["12345","23456","ABCDE","test"]
+//            //POST request
+//            String postUsersUpload = client.sendWriteRequest("http://localhost:49000/zip-codes/expand", "POST", "[]");
+//            System.out.println("POST Response: " + postUsersUpload); //POST Response: ["12345","23456","ABCDE","test"]
 
 
         } catch (Exception e) {

@@ -1,0 +1,64 @@
+o	Steps to reproduce the bug
+o	Actual result
+o	Expected result
+o	Logs from the web service (if available)
+
+Bug #1
+201 status code is from the get request
+
+Precondition: as a verified user
+Steps to Reproduce:
+1. Send GET request to http://localhost:49000/zip-codes
+2. Verify the response
+Actual result: 201 status code is returned, where list of zip codes: ["12345","23456","ABCDE"]
+Expected result: Should get 200 status code and available zip codes should return list ["12345","23456","ABCDE"]
+
+Bug #2
+Duplicates of available zip codes are added to the codes
+
+Precondition: as a verified user
+Steps to Reproduce:
+1. Send GET request to get the codes http://localhost:49000/zip-codes
+2. Verify "12345" is in the codes response
+2. Send POST request to http://localhost:49000/zip-codes/expand, where body: ["12345"] - trying to add one more the same code
+4. Verify the response
+Actual result: 201 status code is returned, duplicates are added
+Expected result: 201 status code is returned, and the zip codes should be added to the available zip codes without any duplications
+
+Bug #3
+Invalid parameters can be sent to the server without any error
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+case 1:
+1. Send POST request to http://localhost:49000/zip-codes/expand, where body: []
+2. Verify the response
+Actual result: 201 status code is returned, array[string] is received
+Expected result: Should be an error message shown
+case 2:
+1. Send POST request to http://localhost:49000/zip-codes/expand, where body: [int]
+2. Verify the response
+Actual result: 201 status code is returned, array[string] is received, where int was turned to String
+Expected result: Should be an error message shown
+case 3:
+1. Send POST request to http://localhost:49000/zip-codes/expand, where body: [null]
+2. Verify the response
+Actual result: 201 status code is returned, array[string] is received, where null is among the strings in array
+Expected result: Should be an error message shown
+
+Bug #4
+Zip codes are not unique: Duplicates of already used zip codes are added to the available codes
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+1. Send GET request to get the codes http://localhost:49000/zip-codes
+2. Verify "23456" is in the response
+3. Add a new user with the code: send POST request to http://localhost:49000/users, where body: {"age": 255, "name": "Tester22","sex": "MALE","zipCode":"23456"}
+4. Get a user to verify the code is added, GET request to http://localhost:49000/users
+5. Verify "23456" is in the response
+5. Try to add the same zip code: "23456", send POST request to http://localhost:49000/zip-codes/expand, body: ["23456"]
+7. Verify the response
+Actual result: "23456" is in the response, so duplicate in use can be added to available zip codes
+Expected result: When zip code is in use, it should not be possible to add the same code to available ones

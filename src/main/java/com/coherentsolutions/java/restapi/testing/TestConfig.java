@@ -16,25 +16,6 @@ public class TestConfig {
     protected static final Logger logger = LoggerFactory.getLogger(TestConfig.class);
 
     /**
-     * try ... catch block
-     * input gets initialized
-     * (if (input != null)), else unsuccessful message is shown
-     * loads the configuration properties from a file
-     */
-    static {
-        try (FileInputStream input = new FileInputStream("src/main/resources/conf.properties")) {
-            if (input != null) {
-                config.load(input);
-            } else {
-                logger.error("Properties file not found.");
-            }
-        } catch (IOException e) {
-            logger.error("Error reading properties file: " + e.getMessage());
-            throw new IllegalStateException("Error reading properties file.", e);
-        }
-    }
-
-    /**
      * initializes file path, key: value
      * loads the configuration properties from a file
      */
@@ -42,21 +23,17 @@ public class TestConfig {
         String propsFilePath = System.getProperty("configFilePath", "src/main/resources/conf.properties");
         try (FileInputStream input = new FileInputStream(propsFilePath)) {
             config.load(input);
-            if (input != null) {
-                logger.info("Properties loaded successfully from " + propsFilePath);
-            } else {
-                logger.error("Properties file not found at " + propsFilePath);
-            }
+            logger.info("Properties loaded successfully from " + propsFilePath);
         } catch (IOException e) {
-            logger.error("Error reading properties file: " + e.getMessage());
+            logger.error("Error reading properties file from " + propsFilePath + ": " + e.getMessage());
             throw new IllegalStateException("Error reading properties file.", e);
         }
     }
-
     /**
-     * (if(key == null))
-     * @param key
-     * @return value
+     * Retrieves the property value associated with the given key.
+     * @param key the property key to look up.
+     * @return the property value.
+     * @throws NullPointerException if the key is null.
      */
     public static String getProperty(String key) {
         if (key == null) {
@@ -78,4 +55,9 @@ public class TestConfig {
     public static String getGrantType() {
         return getProperty("grantType");
     }
+    public static String getZipCodesURL() {
+        return getProperty("zipCodesURL");
+    }
+    public static String getZipCodesExpandURL() {return getProperty("zipCodesExpandURL");}
+    public static String getUsersURL() {return getProperty("usersURL");}
 }
