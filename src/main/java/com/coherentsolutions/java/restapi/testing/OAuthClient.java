@@ -9,23 +9,33 @@ import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Map;
+import java.util.Optional;
 
 public class OAuthClient {
 
     private static OAuthClient instance;
-    private final CloseableHttpClient httpClient;
+    private CloseableHttpClient httpClient;
     private final ObjectMapper objectMapper;
     private String readToken;
     private String writeToken;
+    private static final String READ_SCOPE = "read";
+    private static final String WRITE_SCOPE = "write";
 
     private static final String TOKEN_ENDPOINT = TestConfig.getTokenEndpoint();
-    private static final String USERNAME = TestConfig.getUserName();
+    private static final String USERNAME2 = TestConfig.getUserName();
     private static final String PASSWORD = TestConfig.getPassword();
     private static final String GRANT_TYPE = TestConfig.getGrantType();
+    private long readTokenExpiry;
+    private long writeTokenExpiry;
+
+    protected static final Logger logger = LoggerFactory.getLogger(OAuthClient.class);
 
     private OAuthClient() {
         this.httpClient = HttpClients.createDefault();
@@ -33,24 +43,52 @@ public class OAuthClient {
     }
 
     // Lazy initialization for singleton instance
-    public static OAuthClient getInstance() {
+    public static synchronized OAuthClient getInstance() {
         if (instance == null) {
             instance = new OAuthClient();
         }
         return instance;
     }
+    public void resetHttpClient() {
+        try {
+            if (httpClient != null) {
+                httpClient.close();
+            }
+            this.httpClient = HttpClients.createDefault();
+            logger.info("HttpClient reset successfully.");
+
+        } catch (IOException e) {
+            logger.error("Error while resetting: " + e.getMessage());
+        }
+    }
+    public  void refreshTokensAfterReset() {
+        logger.info("Refreshing the tokens.");
+        readToken = null;
+        writeToken = null;
+        readTokenExpiry = 0;
+        writeTokenExpiry = 0;
+    }
+
+    private boolean isTokenValid(String token, long expiryTime) {
+        return token != null && System.currentTimeMillis() < expiryTime;
+    }
+
     // Get the read token
     public String getReadToken() throws IOException {
-        if (readToken == null) {
-            readToken = fetchToken("read");
+        if (!isTokenValid(readToken, readTokenExpiry)) {
+            TokenResponse tokenResponse = fetchToken(READ_SCOPE);
+            readToken = tokenResponse.getToken();
+            readTokenExpiry = tokenResponse.getExpireTime();
         }
         return readToken;
     }
 
     // Get the write token
     public String getWriteToken() throws IOException {
-        if (writeToken == null) {
-            writeToken = fetchToken("write");
+        if (!isTokenValid(writeToken, writeTokenExpiry)) {
+            TokenResponse tokenResponse = fetchToken(WRITE_SCOPE);
+            writeToken = tokenResponse.getToken();
+            writeTokenExpiry = tokenResponse.getExpireTime();
         }
         return writeToken;
     }
@@ -61,26 +99,28 @@ public class OAuthClient {
      @return access token
      @throws IOException when the HTTP request fails
      */
-    private String fetchToken(String scope) throws IOException {
+    private TokenResponse fetchToken(String scope) throws IOException {
         HttpPost postRequest = new HttpPost(TOKEN_ENDPOINT);
         // Set header
         postRequest.setHeader(HttpHeaders.CONTENT_TYPE, "application/x-www-form-urlencoded");
 
         // Set basic authentication header
-        String basicAuth = Base64.getEncoder().encodeToString((USERNAME + ":" + PASSWORD).getBytes(StandardCharsets.UTF_8));
+        String basicAuth = Base64.getEncoder().encodeToString((USERNAME2 + ":" + PASSWORD).getBytes(StandardCharsets.UTF_8));
         postRequest.setHeader(HttpHeaders.AUTHORIZATION, "Basic " + basicAuth);
 
         // Add form parameters for client credentials grant
-        StringEntity requestBody = new StringEntity(GRANT_TYPE + scope);
+        StringEntity requestBody = new StringEntity(String.format("grant_type=%s&scope=%s", GRANT_TYPE, scope));
         postRequest.setEntity(requestBody);
 
-        // instead of try (CloseableHttpResponse response = httpClient.execute(postRequest))
         return httpClient.execute(postRequest, response -> {
             int statusCode = response.getCode();
-            if (statusCode == HttpStatus.SC_OK) {
+                        if (statusCode == HttpStatus.SC_OK) {
                 String responseBody = EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8);
                 JsonNode rootNode = objectMapper.readTree(responseBody);
-                return rootNode.get("access_token").asText();
+                String token = rootNode.get("access_token").asText();
+                int expiresIn = rootNode.has("expires_in") ? rootNode.get("expires_in").asInt() : 3600;
+                long expireTime = System.currentTimeMillis() + (expiresIn * 1000L);
+                return new TokenResponse(token, expireTime);
             } else {
                 throw new IOException("Failed to fetch token. HTTP Status: " + statusCode);
             }
@@ -133,5 +173,16 @@ public class OAuthClient {
             String responseBody = EntityUtils.toString(response.getEntity());
             return new HttpResponse(statusCode, responseBody);
         });
+    }
+    public void shutdown() throws IOException {
+        httpClient.close();
+        logger.info("The client is closed.");
+    }
+    void restartDockerContainer() throws IOException, InterruptedException {
+        logger.info("Starting to restart the container.");
+        new ProcessBuilder("docker", "stop", "nostalgic_haibt").start().waitFor();
+        new ProcessBuilder("docker", "start", "nostalgic_haibt").start().waitFor();
+        logger.info("Docker container restarted successfully.");
+        Thread.sleep(9000);
     }
 }
