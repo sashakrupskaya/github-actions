@@ -1,17 +1,17 @@
-# Task 30: Create User
+# Task 40: Get Users and Filter Them
 
-**Time to complete:** 3 days
+**Deadline:** 2 days
 
 ### Prerequisites
 
-Before starting this task, you should refer to the information and lessons learned from the previous tasks, as well as review the provided Swagger documentation for the relevant endpoints.
+Before starting this task, refer to the information and insights gained from previous tasks, as well as review the provided Swagger documentation for the relevant endpoints.
 
 ### Task Description
 
 Complete the following tasks using the provided requirements and Swagger documentation for the corresponding endpoints:
 
-1. **Write Auto-Tests for User Creation:**
-   - Develop automated tests to ensure the user creation functionality works according to the specified requirements.
+1. **Write Tests for User Retrieval and Filtering:**
+   - Develop automated tests to ensure the functionality for retrieving and filtering users works according to the specified requirements.
 
 2. **Bug Reporting (If Applicable):**
    - If you encounter any bugs, report them using a standard template. Recommended fields include:
@@ -22,26 +22,26 @@ Complete the following tasks using the provided requirements and Swagger documen
 
 ### Requirements
 
-**Scenario 1: Successful User Creation with All Fields**
+**Scenario 1: Retrieve All Users**
 
 - **Given**: You are an authorized user.
-- **When**: You send a POST request to the `/users` endpoint with a user in the request body where all fields are filled in.
-- **Then**: You should receive a 201 response code, the user should be added to the application, and the zip code should be removed from the available zip codes in the application.
+- **When**: You send a GET request to the `/users` endpoint.
+- **Then**: You should receive a 200 response code and a list of all users currently stored in the application.
 
-**Scenario 2: Successful User Creation with Required Fields**
-
-- **Given**: You are an authorized user.
-- **When**: You send a POST request to the `/users` endpoint with a user in the request body where only the required fields are filled in.
-- **Then**: You should receive a 201 response code, and the user should be added to the application.
-
-**Scenario 3: User Creation with Incorrect Zip Code**
+**Scenario 2: Retrieve Users Older Than a Specified Age**
 
 - **Given**: You are an authorized user.
-- **When**: You send a POST request to the `/users` endpoint with a user in the request body where all fields are filled in, but the zip code is incorrect or unavailable.
-- **Then**: You should receive a 424 response code, and the user should not be added to the application.
+- **When**: You send a GET request to the `/users` endpoint and include the `olderThan` parameter.
+- **Then**: You should receive a 200 response code and a list of all users older than the specified age.
 
-**Scenario 4: User Creation with Duplicate Name and Sex**
+**Scenario 3: Retrieve Users Younger Than a Specified Age**
 
 - **Given**: You are an authorized user.
-- **When**: You send a POST request to the `/users` endpoint with a user in the request body that has the same name and sex as an existing user in the system.
-- **Then**: You should receive a 400 response code, and the user should not be added to the application.
+- **When**: You send a GET request to the `/users` endpoint and include the `youngerThan` parameter.
+- **Then**: You should receive a 200 response code and a list of all users younger than the specified age.
+
+**Scenario 4: Retrieve Users by Sex**
+
+- **Given**: You are an authorized user.
+- **When**: You send a GET request to the `/users` endpoint and include the `sex` parameter.
+- **Then**: You should receive a 200 response code and a list of all users matching the specified sex.
