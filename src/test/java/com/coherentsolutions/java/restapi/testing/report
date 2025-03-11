@@ -8,8 +8,8 @@ Bug #1
 
 Precondition: as a verified user
 Steps to Reproduce:
-1. Send GET request to http://localhost:49000/zip-codes
-2. Verify the response
+    1. Send GET request to http://localhost:49000/zip-codes
+    2. Verify the response
 Actual result: 201 status code is returned, where list of zip codes: ["12345","23456","ABCDE"]
 Expected result: Should get 200 status code and available zip codes should return list ["12345","23456","ABCDE"]
 
@@ -18,10 +18,10 @@ Duplicates of available zip codes are added to the codes
 
 Precondition: as a verified user
 Steps to Reproduce:
-1. Send GET request to get the codes http://localhost:49000/zip-codes
-2. Verify "12345" is in the codes response
-2. Send POST request to http://localhost:49000/zip-codes/expand, where body: ["12345"] - trying to add one more the same code
-4. Verify the response
+    1. Send GET request to get the codes http://localhost:49000/zip-codes
+    2. Verify "12345" is in the codes response
+    2. Send POST request to http://localhost:49000/zip-codes/expand, where body: ["12345"] - trying to add one more the same code
+    4. Verify the response
 Actual result: 201 status code is returned, duplicates are added
 Expected result: 201 status code is returned, and the zip codes should be added to the available zip codes without any duplications
 
@@ -32,18 +32,18 @@ Precondition: as a verified user
 
 Steps to Reproduce:
 case 1:
-1. Send POST request to http://localhost:49000/zip-codes/expand, where body: []
-2. Verify the response
+    1. Send POST request to http://localhost:49000/zip-codes/expand, where body: []
+    2. Verify the response
 Actual result: 201 status code is returned, array[string] is received
 Expected result: Should be an error message shown
 case 2:
-1. Send POST request to http://localhost:49000/zip-codes/expand, where body: [int]
-2. Verify the response
+    1. Send POST request to http://localhost:49000/zip-codes/expand, where body: [int]
+    2. Verify the response
 Actual result: 201 status code is returned, array[string] is received, where int was turned to String
 Expected result: Should be an error message shown
 case 3:
-1. Send POST request to http://localhost:49000/zip-codes/expand, where body: [null]
-2. Verify the response
+    1. Send POST request to http://localhost:49000/zip-codes/expand, where body: [null]
+    2. Verify the response
 Actual result: 201 status code is returned, array[string] is received, where null is among the strings in array
 Expected result: Should be an error message shown
 
@@ -53,12 +53,63 @@ Zip codes are not unique: Duplicates of already used zip codes are added to the 
 Precondition: as a verified user
 
 Steps to Reproduce:
-1. Send GET request to get the codes http://localhost:49000/zip-codes
-2. Verify "23456" is in the response
-3. Add a new user with the code: send POST request to http://localhost:49000/users, where body: {"age": 255, "name": "Tester22","sex": "MALE","zipCode":"23456"}
-4. Get a user to verify the code is added, GET request to http://localhost:49000/users
-5. Verify "23456" is in the response
-5. Try to add the same zip code: "23456", send POST request to http://localhost:49000/zip-codes/expand, body: ["23456"]
-7. Verify the response
+    1. Send GET request to get the codes http://localhost:49000/zip-codes
+    2. Verify "23456" is in the response
+    3. Add a new user with the code: send POST request to http://localhost:49000/users, where body: {"age": 255, "name": "Tester22","sex": "MALE","zipCode":"23456"}
+    4. Get a user to verify the code is added, GET request to http://localhost:49000/users
+    5. Verify "23456" is in the response
+    6. Try to add the same zip code: "23456", send POST request to http://localhost:49000/zip-codes/expand, body: ["23456"]
+    7. Verify the response
 Actual result: "23456" is in the response, so duplicate in use can be added to available zip codes
 Expected result: When zip code is in use, it should not be possible to add the same code to available ones
+
+Bug #5 (task 30: Create a User)
+POST request : Status code is 400 instead of 409, when only one of required fields is sent
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to http://localhost:49000/users, where body: {"name": "Tester25"}, or {"sex": "MALE"}
+    2. Verify the status code
+    3. Verify the message
+Actual result: 400 status code, an empty message field are in case only one required field is sent (log: 01:58:46.096 [main] DEBUG org.apache.hc.client5.http.wire -- http-outgoing-0 << "HTTP/1.1 400 [\r][\n]")
+Expected result: 409 status code with message: "Some required fields are missed" should be shown
+
+Bug #6 (task 30: Create a User)
+POST request : Impossible to create a user sending only required fields
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to http://localhost:49000/users, where body: {"name": "Tester25", "sex": "MALE"}
+    2. Verify the status code
+    3. Verify response from GET request: http://localhost:49000/users
+Actual result: User is not added to the application, 400 status code is in case only required fields are sent (log: {"timestamp":1741648299715,"status":400,"error":"Bad Request","message":"","path":"/users"}[\r][\n]")
+Expected result: The user is added: where response {"name": "Tester25", "sex": "MALE"} from GET request: http://localhost:49000/users, 201 status code with message: "User is created" should be shown
+
+
+Bug #7 (task 30: Create a User)
+POST request : Status code is 424 instead of 400, when try to create a user with duplicated Name and Sex
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to http://localhost:49000/users, where body: {"age": 25, "name": "Tester25", "sex": "MALE", "zipCode": "23456"}
+    2. Verify response from GET request: http://localhost:49000/users
+    3. Send the same request with the same body as in step 1
+    4. Verify the status code
+Actual result: 424 status code is in case sent duplicates for "name" and "sex"
+Expected result: 400 status code with message: "Users must be unique for complex key name+sex" should be shown
+
+
+Bug #8 (task 30: Create a User)
+POST request: Response body format does not correspond to the requirements
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to http://localhost:49000/users, where body: {"age": 25, "name": "Tester25", "sex": "MALE", "zipCode": "23456"}
+    2. Verify the response body of POST request from the 1 step
+Actual result: Empty response body from POST request
+Expected result: Should be {} based on the requirements
+
