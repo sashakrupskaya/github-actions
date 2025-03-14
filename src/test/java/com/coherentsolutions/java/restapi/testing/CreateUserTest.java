@@ -219,4 +219,20 @@ public class CreateUserTest {
                 () -> assertEquals("[{\"name\":\"Tester25\",\"age\":25,\"sex\":\"MALE\",\"zipCode\":\"23456\"}]", getUsers1.getBody(), "The body is incorrect. Get users: " + getUsers1.getBody())
         );
     }
+    @Test
+    public void createSeveralUsersAtOnce() throws IOException {
+        HttpResponse createUsers = client.sendWriteRequest(USERS_URL, "POST",
+                "[{\"name\":\"Tester25\",\"age\":25,\"sex\":\"MALE\",\"zipCode\":\"23456\"},{\"name\":\"Tester87\",\"age\":87,\"sex\":\"MALE\",\"zipCode\":\"12345\"},{\"name\":\"Tester71\",\"age\":71,\"sex\":\"FEMALE\",\"zipCode\":\"ABCDE\"}]"
+        );
+        HttpResponse getUsers = client.sendGetRequest(USERS_URL);
+        logger.info("Create status code: " + createUsers.getStatusCode());
+        logger.info("The list of users: " + getUsers.getBody());
+        assertAll(
+                "Grouped Assertions of getUsers",
+                () -> assertEquals(201, createUsers.getStatusCode(), "Status code is incorrect: " + createUsers.getStatusCode()),
+                () -> assertEquals("{}", createUsers.getBody(), "The response body is incorrect: " + createUsers.getBody()),
+                () -> assertEquals(200, getUsers.getStatusCode(), "Incorrect status code: " + getUsers.getStatusCode()),
+                () -> assertEquals("[{\"name\":\"Tester25\",\"age\":25,\"sex\":\"MALE\",\"zipCode\":\"23456\"},{\"name\":\"Tester87\",\"age\":87,\"sex\":\"MALE\",\"zipCode\":\"12345\"},{\"name\":\"Tester71\",\"age\":71,\"sex\":\"FEMALE\",\"zipCode\":\"ABCDE\"}]", getUsers.getBody(), "Incorrect body: " + getUsers.getBody())
+        );
+    }
 }

@@ -14,8 +14,8 @@ public class TokenResponse {
     }
     public String getToken() {
         if (token == null) {
-            logger.info("Token is incorrect.");
-            throw new NullPointerException("Token is null.");
+            logger.error("Attempt to access an uninitialized token.");
+            throw new IllegalStateException("Token has not been initialized.");
         }
         return token;
     }

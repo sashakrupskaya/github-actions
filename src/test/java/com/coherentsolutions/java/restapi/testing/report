@@ -113,3 +113,43 @@ Steps to Reproduce:
 Actual result: Empty response body from POST request
 Expected result: Should be {} based on the requirements
 
+
+Bug #9 (task 30: Create a User)
+POST request: Cannot add several users at a time
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to http://localhost:49000/users, where body: [{"name":"Tester25","age":25,"sex":"MALE","zipCode":"23456"},{"name":"Tester87","age":87,"sex":"MALE","zipCode":"12345"},{"name":"Tester71","age":71,"sex":"FEMALE","zipCode":"ABCDE"}]
+    2. Verify the response body of POST request from the 1 step
+    3. Send GET request to http://localhost:49000/users
+    4. Verify the response body of GET request
+Actual result: 400 status code when try to add several users at once, log: {"timestamp":1741969388607,"status":400,"error":"Bad Request","message":"","path":"/users"}
+Expected result: Need to clarify the requirements - what should be expected
+
+
+Bug #10 (task 40: Get Users and Filter Them) - probably not a bug, but enhancement
+int 32 is too much for the age value
+
+
+Steps to Reproduce:
+  1. Proceed to /swagger-ui/#/user-controller/getAllUsersUsingGET
+  2. Verify age in GET /users
+Actual result: Int32 holds diapason  (-2,147,483,648 to +2,147,483,647)
+Expected result: Should be ok to have byte (-128 to 127) as age
+
+
+Bug #11 (task 40: Get Users and Filter Them) - relates to 8th one
+GET request: Response body format does not correspond to the requirements
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to http://localhost:49000/users, where body: {"age": 25, "name": "Tester25", "sex": "MALE", "zipCode": "23456"}
+    2. Send POST request to http://localhost:49000/users, where body: {"name":"Tester87","age":87,"sex":"MALE","zipCode":"12345"}
+    3. Send GET request to http://localhost:49000/users
+    4. Verify the body
+Actual result: body is an array of objects: [{"name":"Tester25","age":25,"sex":"MALE","zipCode":"23456"},{"name":"Tester87","age":87,"sex":"MALE","zipCode":"12345"}]
+Expected result: Should be {} based on the requirements, however need to clarify the requirements - probably an issue there.
+
+
