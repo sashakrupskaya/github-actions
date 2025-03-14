@@ -1,6 +1,6 @@
-# Task 40: Get Users and Filter Them
+# Task 50: Update User
 
-**Deadline:** 2 days
+**Deadline:** 5 days
 
 ### Prerequisites
 
@@ -10,8 +10,8 @@ Before starting this task, refer to the information and insights gained from pre
 
 Complete the following tasks using the provided requirements and Swagger documentation for the corresponding endpoints:
 
-1. **Write Tests for User Retrieval and Filtering:**
-   - Develop automated tests to ensure the functionality for retrieving and filtering users works according to the specified requirements.
+1. **Write Tests for User Update Functionality:**
+   - Develop automated tests to ensure the user update functionality works according to the specified requirements.
 
 2. **Bug Reporting (If Applicable):**
    - If you encounter any bugs, report them using a standard template. Recommended fields include:
@@ -22,26 +22,20 @@ Complete the following tasks using the provided requirements and Swagger documen
 
 ### Requirements
 
-**Scenario 1: Retrieve All Users**
+**Scenario 1: Successful User Update**
 
 - **Given**: You are an authorized user.
-- **When**: You send a GET request to the `/users` endpoint.
-- **Then**: You should receive a 200 response code and a list of all users currently stored in the application.
+- **When**: You send a PUT or PATCH request to the `/users` endpoint with a request body that contains the user to update along with the new values.
+- **Then**: You should receive a 200 response code, and the user should be successfully updated.
 
-**Scenario 2: Retrieve Users Older Than a Specified Age**
-
-- **Given**: You are an authorized user.
-- **When**: You send a GET request to the `/users` endpoint and include the `olderThan` parameter.
-- **Then**: You should receive a 200 response code and a list of all users older than the specified age.
-
-**Scenario 3: Retrieve Users Younger Than a Specified Age**
+**Scenario 2: User Update with Incorrect Zip Code**
 
 - **Given**: You are an authorized user.
-- **When**: You send a GET request to the `/users` endpoint and include the `youngerThan` parameter.
-- **Then**: You should receive a 200 response code and a list of all users younger than the specified age.
+- **When**: You send a PUT or PATCH request to the `/users` endpoint with a request body that contains the user to update along with new values, but the new zip code is incorrect or unavailable.
+- **Then**: You should receive a 424 response code, and the user should not be updated.
 
-**Scenario 4: Retrieve Users by Sex**
+**Scenario 3: User Update with Missing Required Fields**
 
 - **Given**: You are an authorized user.
-- **When**: You send a GET request to the `/users` endpoint and include the `sex` parameter.
-- **Then**: You should receive a 200 response code and a list of all users matching the specified sex.
+- **When**: You send a PUT or PATCH request to the `/users` endpoint with a request body that contains the user to update along with new values, but some required fields are missing.
+- **Then**: You should receive a 409 response code, and the user should not be updated.
