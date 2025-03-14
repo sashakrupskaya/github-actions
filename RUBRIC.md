@@ -1,19 +1,19 @@
-# Rubric for "Get Users and Filter Them" Task
+# Rubric for "Update User" Task
 
 **Maximum Points: 100**
 
 ### Criteria
 
-1. **Understanding of User Retrieval and Filtering Requirements (25 points)**
-   - Full understanding and correct implementation of the scenarios for retrieving and filtering users.
-   - Proper handling of all specified cases, including different filtering parameters.
+1. **Understanding of User Update Requirements (25 points)**
+   - Full understanding and correct implementation of the scenarios for updating users.
+   - Proper handling of all specified cases, including both successful updates and error scenarios.
 
    - *25 points*: Demonstrates full understanding and correct implementation.
    - *13-24 points*: Some understanding, but with minor errors.
    - *0-12 points*: Lacks understanding or misapplies key concepts.
 
 2. **Test Coverage (40 points)**
-   - Comprehensive test cases covering all scenarios for user retrieval and filtering functionality.
+   - Comprehensive test cases covering all scenarios for user update functionality.
    - Edge cases and negative scenarios are considered.
 
    - *40 points*: Comprehensive coverage with no issues.
