@@ -153,3 +153,109 @@ Actual result: body is an array of objects: [{"name":"Tester25","age":25,"sex":"
 Expected result: Should be {} based on the requirements, however need to clarify the requirements - probably an issue there.
 
 
+
+Bug #12 (task 50: Update the User) - similar to 8th one
+PUT/PATCH requests: Response body format does not correspond to the requirements
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to create a user: http://localhost:49000/users, where body: {"age": 25, "name": "Tester25", "sex": "MALE", "zipCode": "23456"}
+    2. Send PUT/PATCH request to update the user to another one: http://localhost:49000/users, where body: {
+                                                                                                       "userNewValues": {
+                                                                                                         "age": 26,
+                                                                                                         "name": "Tester26",
+                                                                                                         "sex": "FEMALE",
+                                                                                                         "zipCode": "12345"
+                                                                                                       },
+                                                                                                       "userToChange": {
+                                                                                                         "age": 25,
+                                                                                                         "name": "Tester25",
+                                                                                                         "sex": "MALE",
+                                                                                                         "zipCode": "23456"
+                                                                                                       }
+                                                                                                     }
+    3. Verify the body
+Actual result: no body
+Expected result: should be {} format, need to specify the difference between PUT and PATCH methods,
+PATCH should be used for partial updates, when PUT should be used for the full update
+
+
+
+Bug #13 (task 50: Update the User)
+PUT/PATCH request: Age and Zip code (non required fields) turn to null when do not specify them
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to create a user: http://localhost:49000/users, where body: {"age": 25, "name": "Tester25", "sex": "MALE", "zipCode": "23456"}
+    2. Send PUT/PATCH request to http://localhost:49000/users, where age and zip code are missed  {
+                                                                                                               "userNewValues": {
+
+                                                                                                                 "name": "Tester25",
+                                                                                                                 "sex": "MALE"
+
+                                                                                                               },
+                                                                                                               "userToChange": {
+                                                                                                                 "age": 25,
+                                                                                                                 "name": "Tester25",
+                                                                                                                 "sex": "MALE",
+                                                                                                                 "zipCode": "23456"
+                                                                                                               }
+                                                                                                             }
+    3. Send GET request to http://localhost:49000/users
+    4. Verify the response
+
+Actual result: [{"name":"Tester25","age":null,"sex":"MALE","zipCode":null}], age and zipCode turn to null
+Expected result: Should be difference between PUT and PATCH requests. Usually PUT is used for creating (if not exist) or full update,
+when PATCH is used for partial updates.
+PUT - not mentioned non required fields - do not show them in response to have [{"name":"Tester25","sex":"MALE"}]
+PATCH - not mentioned fields should remain as they were to have [{"name":"Tester25","age":25,"sex":"MALE","zipCode":"23456"}]
+
+
+
+Bug #14 (task 50: Update the User)
+PUT/PATCH request: The previously created user is deleted during an attempt to update with incorrect/unavailable zip code or missed required field
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to create a user: http://localhost:49000/users, where body: {"age": 25, "name": "Tester25", "sex": "MALE", "zipCode": "23456"}
+    2. Send PUT/PATCH request to http://localhost:49000/users, where incorrect/unavailable "zipCode": "":  {
+                                                                                                           "userNewValues": {
+                                                                                                             "age": 26,
+                                                                                                             "name": "Tester26",
+                                                                                                             "sex": "FEMALE",
+                                                                                                             "zipCode": ""
+                                                                                                           },
+                                                                                                           "userToChange": {
+                                                                                                             "age": 25,
+                                                                                                             "name": "Tester25",
+                                                                                                             "sex": "MALE",
+                                                                                                             "zipCode": "23456"
+                                                                                                           }
+                                                                                                         }
+    3. Send GET request to http://localhost:49000/users
+    4. Verify the response
+Actual result: when check the response after the update request, where zip code was incorrect, or some required field was missed,
+[] - the data for previously created user (only one, which was trying to update) was deleted
+Expected result: [{"name":"Tester25","age":25,"sex":"MALE","zipCode":"23456"}] - the created user should remain
+
+
+
+Bug #15 (task 50: Update the User) - closer to an enhancement
+PUT/PATCH requests: The difference between two methods is only in name
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Review the http://localhost:49000/swagger-ui/#/user-controller/
+Actual result:
+    1. No difference between the PUT and PATCH methods
+    2. Not usual complex key name+sex
+Expected result:
+    1. The requirements should be re-written, should be added differences like
+    when no user with the described fields - add the user using PUT.
+    As well as added in 13th - full and partial updates.
+    2. It is better to use unique ID generated by creation, so in update
+    request should be just specified the ID in the URL to select the user.
