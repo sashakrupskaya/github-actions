@@ -1,6 +1,7 @@
 package com.coherentsolutions.java.restapi.testing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +19,11 @@ public class UpdateUserByPutTest {
 
     private static final String USERS_URL = TestConfig.getUsersURL();
     protected static final Logger logger = LoggerFactory.getLogger(UpdateUserByPutTest.class);
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new Jdk8Module());
+    private static final int INITIAL_AGE = 25;
+    private static final String INITIAL_NAME = "Tester25";
+    private static final Sex INITIAL_SEX = Sex.MALE;
+    private static final String INITIAL_ZIP_CODE = "23456";
 
     @BeforeEach
     public void setUp() throws IOException, InterruptedException {
@@ -28,17 +34,17 @@ public class UpdateUserByPutTest {
     }
     @AfterEach
     public void closeUp() throws IOException {client.shutdown();}
+    private void createUser(User user) throws IOException {
+        String requestBody = objectMapper.writeValueAsString(user);
+        client.sendWriteRequest(USERS_URL, "POST", requestBody);
+    }
     @Test
     public void updateUserAllValues() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-        User userNewValues = new User(26, "Tester26", Sex.FEMALE, "12345");
-        User anotherUser = new User(25, "Tester25", Sex.FEMALE, "ABCDE");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-        String createAnotherUserBody = objectMapper.writeValueAsString(anotherUser);
-        HttpResponse createAnotherUser = client.sendWriteRequest(USERS_URL, "POST", createAnotherUserBody);
-
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
+        User anotherUser = new User(Optional.of(25), "Tester25", Sex.FEMALE, Optional.of("ABCDE"));
+        createUser(userToChange);
+        createUser(anotherUser);
         String updateUserBody = objectMapper.writeValueAsString(Map.of("userNewValues", userNewValues, "userToChange", userToChange));
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT", updateUserBody);
 
@@ -54,10 +60,8 @@ public class UpdateUserByPutTest {
     //zip code is missed
     @Test
     public void updateAge() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": {\n" +
@@ -85,9 +89,8 @@ public class UpdateUserByPutTest {
     //age and zip code are missed
     @Test
     public void updateName() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": {\n" +
@@ -102,7 +105,6 @@ public class UpdateUserByPutTest {
                         "  }\n" +
                         "}"
         );
-
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         logger.info("Response body: " + updateUser.getBody());
         assertAll(
@@ -115,9 +117,8 @@ public class UpdateUserByPutTest {
     //age and zip code are missed
     @Test
     public void updateSex() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": {\n" +
@@ -132,7 +133,6 @@ public class UpdateUserByPutTest {
                         "  }\n" +
                         "}"
         );
-
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         logger.info("Response body: " + updateUser.getBody());
         assertAll(
@@ -145,9 +145,8 @@ public class UpdateUserByPutTest {
     //age is missed
     @Test
     public void updateZipCode() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": {\n" +
@@ -163,7 +162,6 @@ public class UpdateUserByPutTest {
                         "  }\n" +
                         "}"
         );
-
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         logger.info("Response body: " + updateUser.getBody());
         assertAll(
@@ -176,11 +174,10 @@ public class UpdateUserByPutTest {
 
     @Test
     public void updateUserWhenChangeUsersOrderInRequestBody() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-        User userNewValues = new User(26, "Tester26", Sex.FEMALE, "12345");
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
 
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
+        createUser(userToChange);
         String updateUserBody = objectMapper.writeValueAsString(Map.of("userToChange", userToChange, "userNewValues", userNewValues));
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT", updateUserBody);
 
@@ -195,11 +192,8 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateUserWhenChangeTheFieldsOrderInNewValues() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": {\n" +
@@ -226,11 +220,8 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateUserWhenChangeTheFieldsOrderInToChangeValues() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": {\n" +
@@ -257,11 +248,9 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateUserWhenIncorrectZipCode() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-        User userNewValues = new User(26, "Tester26", Sex.FEMALE, "");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of(""));
+        createUser(userToChange);
         String updateUserBody = objectMapper.writeValueAsString(Map.of("userToChange", userToChange, "userNewValues", userNewValues));
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT", updateUserBody);
 
@@ -277,16 +266,11 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateUserWhenUnavailableZipCode() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-        User userNewValues = new User(26, "Tester26", Sex.FEMALE, "12345");
-        User anotherUser = new User(21, "Tester21", Sex.MALE, "12345");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-
-        String createAnotherUserBody = objectMapper.writeValueAsString(anotherUser);
-        HttpResponse createAnotherUser = client.sendWriteRequest(USERS_URL, "POST", createAnotherUserBody);
-
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
+        User anotherUser = new User(Optional.of(21), "Tester21", Sex.MALE, Optional.of("12345"));
+        createUser(userToChange);
+        createUser(anotherUser);
         String updateUserBody = objectMapper.writeValueAsString(Map.of("userNewValues", userNewValues, "userToChange", userToChange));
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT", updateUserBody);
 
@@ -301,11 +285,8 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateUserWhenNameIsMissed() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": {\n" +
@@ -333,11 +314,8 @@ public class UpdateUserByPutTest {
 
     @Test
     public void updateUserWhenSexIsMissed() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": {\n" +
@@ -364,11 +342,8 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateUserWhenNameAndSexAreMissed() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": {\n" +
@@ -394,12 +369,9 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateUserWhenAllNewValuesAreNull() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         User userNewValues = new User(null, null, null, null);
-
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
+        createUser(userToChange);
 
         String updateUserBody = objectMapper.writeValueAsString(Map.of("userNewValues", userNewValues, "userToChange", userToChange));
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT", updateUserBody);
@@ -414,11 +386,8 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateUserWithTheSameData() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         String updateUserBody = objectMapper.writeValueAsString(Map.of("userNewValues", userToChange, "userToChange", userToChange));
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT", updateUserBody);
 
@@ -433,8 +402,8 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateNonExistingUser() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-        User userNewValues = new User(26, "Tester26", Sex.FEMALE, "12345");
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
 
         String updateUserBody = objectMapper.writeValueAsString(Map.of("userNewValues", userNewValues, "userToChange", userToChange));
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT", updateUserBody);
@@ -449,11 +418,8 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateUserWhenUserToChangeIsNull() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": {\n" +
@@ -477,12 +443,8 @@ public class UpdateUserByPutTest {
     @Test
     public void updateUserWhenUsersToChangeValuesAreNull() throws IOException {
         User userToChange = new User(null, null, null, null);
-        User userNewValues = new User(26, "Tester26", Sex.FEMALE, "12345");
-
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-
+        User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
+        createUser(userToChange);
         String updateUserBody = objectMapper.writeValueAsString(Map.of("userNewValues", userNewValues, "userToChange", userToChange));
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT", updateUserBody);
 
@@ -496,11 +458,8 @@ public class UpdateUserByPutTest {
     }
     @Test
     public void updateUserWhenUserNewValuesAreNull() throws IOException {
-        User userToChange = new User(25, "Tester25", Sex.MALE, "23456");
-
-        String createUserToChangeBody = objectMapper.writeValueAsString(userToChange);
-        HttpResponse createUserToChange = client.sendWriteRequest(USERS_URL, "POST", createUserToChangeBody);
-
+        User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
+        createUser(userToChange);
         HttpResponse updateUser = client.sendWriteRequest(USERS_URL, "PUT",
                 "{\n" +
                         "  \"userNewValues\": null \n" +

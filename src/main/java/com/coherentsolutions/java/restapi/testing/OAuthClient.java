@@ -155,7 +155,7 @@ public class OAuthClient {
                 request = new HttpPatch(url);
                 break;
             case "DELETE":
-                request = new HttpDelete(url);
+                request = (body != null && !body.isEmpty()) ? new HttpDeleteWithBody(url) : new HttpDelete(url);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported HTTP method: " + method);
@@ -164,13 +164,13 @@ public class OAuthClient {
         request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getWriteToken());
         request.setHeader(HttpHeaders.CONTENT_TYPE, "application/json");
 
-        if (body != null) {
+        if (body != null && !body.isEmpty()) {
             ((HttpEntityContainer) request).setEntity(new StringEntity(body, StandardCharsets.UTF_8));
         }
 
         return httpClient.execute(request, response -> {
             int statusCode = response.getCode();
-            String responseBody = EntityUtils.toString(response.getEntity());
+            String responseBody = response.getEntity() != null ? EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8) : null;
             return new HttpResponse(statusCode, responseBody);
         });
     }
