@@ -1,41 +1,47 @@
-# Task 70: Upload Users
+# Task 80: Allure Reporting
 
-**Deadline:** 2 days
+**Deadline:** 5 days
 
 ### Prerequisites
 
-Before starting this task, make sure to review the coding examples provided in the "Multipart Upload with Apache HttpClient" tutorial, as well as any related information from previous tasks. This will give you a solid foundation for understanding how to handle multipart uploads with HttpClient.
+Before starting this task, make sure to review the following resources:
+
+- **[Allure Report Documentation](https://allurereport.org/docs/):** Understand how Allure Report works, how to integrate it with your testing framework, and how to use its features effectively.
+- **[HttpClient Tutorial - Chapter 1.5: Exception Handling](https://hc.apache.org/httpcomponents-client-4.5.x/current/tutorial/html/fundamentals.html#d5e279):** Gain a deep understanding of how to handle exceptions in HTTP protocol processing.
 
 ### Task Description
 
-Complete the following tasks using the provided requirements and Swagger documentation for the corresponding endpoints:
+Complete the following tasks to enhance the reporting capabilities of your project using the Allure framework:
 
-1. **Write Tests for User Upload Functionality:**
-   - Develop automated tests to ensure the user upload functionality works according to the specified requirements.
+1. **Add Allure Framework to the Project:**
+   - Integrate the Allure framework into your testing project to enable advanced reporting features.
 
-2. **Bug Reporting (If Applicable):**
-   - If you encounter any bugs, report them using a standard template. Recommended fields include:
-     - Steps to reproduce the bug
-     - Actual result
-     - Expected result
-     - Logs from the web service (if available)
+2. **Enhance Test Reports:**
+   - Add payload details to each test in the Allure report to provide comprehensive data for analysis.
+   - Use the `@Step` annotation to improve the readability and structure of the test reports by breaking down the test logic into clearly defined steps.
+
+3. **Mark Tests with Bugs:**
+   - Identify any tests that are linked to known bugs and use the corresponding Allure annotations to highlight these in the report.
 
 ### Requirements
 
-**Scenario 1: Successful User Upload**
+**Task 1: Integrate Allure Framework**
 
-- **Given**: You are an authorized user.
-- **When**: You send a POST request to the `/users/upload` endpoint with a request body containing a JSON file with an array of users to upload.
-- **Then**: You should receive a 201 response code, all existing users should be replaced with the users from the file, and the response should contain the number of uploaded users.
+- **Objective**: Successfully integrate the Allure framework into the existing project.
+- **Expected Outcome**: The project should be capable of generating Allure reports after test execution.
 
-**Scenario 2: User Upload with Incorrect Zip Code**
+**Task 2: Add Payload Details to Reports**
 
-- **Given**: You are an authorized user.
-- **When**: You send a POST request to the `/users/upload` endpoint with a request body containing a JSON file with an array of users to upload, and at least one user has an incorrect or unavailable zip code.
-- **Then**: You should receive a 424 response code, and the users should not be uploaded.
+- **Objective**: Include payload information in the Allure reports for each test.
+- **Expected Outcome**: The Allure report should display the payload data associated with each test, allowing for detailed analysis.
 
-**Scenario 3: User Upload with Missing Required Fields**
+**Task 3: Improve Report Readability with Step Annotations**
 
-- **Given**: You are an authorized user.
-- **When**: You send a POST request to the `/users/upload` endpoint with a request body containing a JSON file with an array of users to upload, and at least one user has a missing required field.
-- **Then**: You should receive a 409 response code, and the users should not be uploaded.
+- **Objective**: Utilize the `@Step` annotation to organize the report by breaking down each test into its constituent steps.
+- **Expected Outcome**: The Allure report should clearly display the steps involved in each test, enhancing the report's clarity and readability.
+
+**Task 4: Annotate Tests with Known Bugs**
+
+- **Objective**: Mark tests that are related to known bugs using the appropriate Allure annotations.
+- **Expected Outcome**: The Allure report should clearly indicate tests associated with known bugs, making it easier to track issues.
+
