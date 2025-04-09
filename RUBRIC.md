@@ -1,39 +1,40 @@
-# Rubric for "Upload Users" Task
+# Rubric for "Allure Reporting" Task
 
 **Maximum Points: 100**
 
 ### Criteria
 
-1. **Understanding of User Upload Requirements (25 points)**
-   - Full understanding and correct implementation of the scenarios for uploading users.
-   - Proper handling of all specified cases, including both successful uploads and error scenarios.
+1. **Integration of Allure Framework (25 points)**
+   - Correct and complete integration of the Allure framework into the project.
+   - The framework should be fully functional and capable of generating reports.
 
-   - *25 points*: Demonstrates full understanding and correct implementation.
-   - *13-24 points*: Some understanding, but with minor errors.
-   - *0-12 points*: Lacks understanding or misapplies key concepts.
+   - *25 points*: Allure is correctly integrated, and reports are generated without issues.
+   - *13-24 points*: Integration is mostly correct, with minor issues in report generation.
+   - *0-12 points*: Integration is incomplete or incorrect, preventing report generation.
 
-2. **Test Coverage (40 points)**
-   - Comprehensive test cases covering all scenarios for user upload functionality.
-   - Edge cases and negative scenarios are considered.
+2. **Inclusion of Payload in Reports (25 points)**
+   - Accurate inclusion of payload details in the Allure reports.
+   - Payload data should be comprehensive and enhance the understanding of test outcomes.
 
-   - *40 points*: Comprehensive coverage with no issues.
-   - *21-39 points*: Good coverage with minor issues or missed edge cases.
-   - *0-20 points*: Incomplete coverage with significant gaps.
+   - *25 points*: Payload is correctly and comprehensively included in all relevant reports.
+   - *13-24 points*: Payload is included but may be incomplete or missing in some reports.
+   - *0-12 points*: Payload is not included or is incorrect, reducing report effectiveness.
 
-3. **Bug Reporting (20 points)**
-   - Clear and concise bug reports with detailed steps to reproduce, expected vs actual results, and logs where applicable.
+3. **Use of Step Annotations (25 points)**
+   - Effective use of `@Step` annotations to improve the readability of the reports.
+   - The steps should be well-organized and clearly displayed in the report.
 
-   - *20 points*: Detailed, clear, and well-structured bug reports.
-   - *10-19 points*: Some details missing or reports lack clarity.
-   - *0-9 points*: Incomplete or unclear bug reports.
+   - *25 points*: `@Step` annotations are used effectively, and reports are clear and well-structured.
+   - *13-24 points*: `@Step` annotations are used but may be inconsistent or unclear in some cases.
+   - *0-12 points*: `@Step` annotations are not used, or their use does not improve report readability.
 
-4. **Code Quality and Best Practices (15 points)**
-   - Clean, readable, and well-structured code following best practices.
-   - Proper use of version control and meaningful commit messages.
+4. **Annotation of Tests with Known Bugs (25 points)**
+   - Correctly identifying and marking tests associated with known bugs using Allure annotations.
+   - The annotations should be clear and help in tracking and managing known issues.
 
-   - *15 points*: Clean, well-structured, and adheres to best practices.
-   - *8-14 points*: Minor issues with structure or adherence to best practices.
-   - *0-7 points*: Poor code quality with significant issues.
+   - *25 points*: All tests with known bugs are correctly annotated, with clear indications in the report.
+   - *13-24 points*: Most tests with known bugs are annotated, but some may be missed or incorrectly marked.
+   - *0-12 points*: Tests with known bugs are not annotated or are incorrectly marked, reducing the report's utility.
 
 ### Final Grade: 
 - Total points = [___/100]
