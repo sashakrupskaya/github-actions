@@ -95,5 +95,13 @@ public class TestConfig {
             logger.error("usersURL is null.");
             throw new NullPointerException("usersURL.");
         }
-        return getProperty("usersURL");}
+        return getProperty("usersURL");
+    }
+    public static String getUsersUploadURL() {
+        if (getProperty("usersUploadURL") == null) {
+            logger.error("usersUploadURL is null.");
+            throw new NullPointerException("usersUploadURL.");
+        }
+        return getProperty("usersUploadURL");
+    }
 }

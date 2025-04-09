@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.client5.http.classic.methods.*;
 
+import org.apache.hc.client5.http.entity.mime.FileBody;
+import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.*;
@@ -12,11 +14,10 @@ import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Map;
-import java.util.Optional;
 
 public class OAuthClient {
 
@@ -167,6 +168,26 @@ public class OAuthClient {
         if (body != null && !body.isEmpty()) {
             ((HttpEntityContainer) request).setEntity(new StringEntity(body, StandardCharsets.UTF_8));
         }
+
+        return httpClient.execute(request, response -> {
+            int statusCode = response.getCode();
+            String responseBody = response.getEntity() != null ? EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8) : null;
+            return new HttpResponse(statusCode, responseBody);
+        });
+    }
+    // Send a POST request to upload file with the write token
+    public HttpResponse uploadJsonFile(String url, File jsonFile) throws Exception {
+        if (!jsonFile.exists()) {
+            throw new IOException("No files provided for upload: " + jsonFile.getPath());
+        }
+        HttpPost request = new HttpPost(url);
+        request.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + getWriteToken());
+
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        builder.setContentType(ContentType.MULTIPART_FORM_DATA);
+        builder.addPart("file", new FileBody(jsonFile, ContentType.APPLICATION_JSON));
+
+        request.setEntity(builder.build());
 
         return httpClient.execute(request, response -> {
             int statusCode = response.getCode();

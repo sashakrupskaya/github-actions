@@ -318,4 +318,82 @@ Actual result: 400 Bad Request, the user was not deleted
 Expected result: based on the requirements should be 409 status code, Some required fields are missed
 
 
+Bug #20 (task 70: Upload user)
+POST request: Incorrect behavior when try to upload a user with incorrect/unavailable zip code
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to http://localhost:49000/users, where body: {"age": 25, "name": "Tester25", "sex": "MALE", "zipCode": "23456"}
+    2. Add .json file with body, where zip code is incorrect/unavailable: [{"age":26,"name":"Tester26","sex":"FEMALE","zipCode":"1"}]/[{"age":26,"name":"Tester26","sex":"FEMALE","zipCode":"23456"}]
+    3. Send POST request to http://localhost:49000/users/upload, mention the .json file
+    4. Verify the status code and body
+    5. Send GET request to http://localhost:49000/users
+    6. Verify the response
+Actual result:
+    1. zip code is incorrect - {"timestamp":1744144401489,"status":500,"error":"Internal Server Error","message":"","path":"/users/upload"}, previously created user is removed
+    2. zip code is unavailable - 201 status code, Body: Number of users = 1, user is replaced
+    3. zip code is unavailable, where /json file has body - 2 users with the same already used zip code
+    [
+      {
+        "age":26,
+        "name":"Tester26",
+        "sex":"FEMALE",
+        "zipCode":"23456"
+      },
+      {
+        "age":28,
+        "name":"Tester28",
+        "sex":"FEMALE",
+        "zipCode":"23456"
+      }
+    ] - Body: {"timestamp":1744146146273,"status":500,"error":"Internal Server Error","message":"","path":"/users/upload"}, the user is replaced on first user object {"name":"Tester26","age":26,"sex":"FEMALE","zipCode":"23456"}
+Expected result: based on the requirements: should be received 424 status code, "Specified zip code is not available" - body, created user should remain unchanged
+
+
+Bug #21 (task 70: Upload user)
+POST request: Incorrect behavior when try to upload user/users without required field/fields
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to http://localhost:49000/users, where body: {"age": 25, "name": "Tester25", "sex": "MALE", "zipCode": "23456"}
+    2. Add .json file with body, where missed required field/fields: [{"age":26,"sex":"FEMALE","zipCode":"12345"}]
+    3. Send POST request to http://localhost:49000/users/upload, mention the .json file
+    4. Verify the status code and body
+    5. Send GET request to http://localhost:49000/users
+    6. Verify the response
+Actual result: {"timestamp":1744149442805,"status":500,"error":"Internal Server Error","message":"","path":"/users/upload"}, previously created user was removed
+Expected result: Should be 409 status code, "Some required fields are missed" - body, created user should remain unchanged
+
+
+Bug #22 (task 70: Upload user)
+POST request: "field": null - after uploading a user without non required field/fields
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to http://localhost:49000/users, where body: {"age": 25, "name": "Tester25", "sex": "MALE", "zipCode": "23456"}
+    2. Add .json file with body, where missed age/zip code or both: [{"name": "Tester26","sex":"FEMALE","zipCode":"12345"}]/[{"age":26,"name":"Tester26","sex":"FEMALE"}]/[{ "name": "Tester26", "sex": "FEMALE"}]
+    3. Send POST request to http://localhost:49000/users/upload, mention the .json file
+    4. Send GET request to http://localhost:49000/users
+    5. Verify the response
+Actual result: [{"name":"Tester26","age":null,"sex":"FEMALE","zipCode":"12345"}]
+Expected result: not mentioned in requirements, need to clarify. As a solution [{"name":"Tester26","sex":"FEMALE","zipCode":"12345"}] - do not mention field with null
+
+
+Bug #23 (task 70: Upload user)
+POST request: Non .json (.txt) file is parsed, no errors
+
+Precondition: as a verified user
+
+Steps to Reproduce:
+    1. Send POST request to http://localhost:49000/users, where body: {"age": 25, "name": "Tester25", "sex": "MALE", "zipCode": "23456"}
+    2. Add .txt file with body [{"age":26,"name":"Tester26","sex":"FEMALE","zipCode":"12345"}]
+    3. Send POST request to http://localhost:49000/users/upload, mention the .txt file
+    4. Verify the status code and body
+    5. Send GET request to http://localhost:49000/users
+    6. Verify the response
+Actual result:  status code: 201, "Number of users = 1" - body
+Expected result: Should be 400 status code, "Can't parse file with users" - body, created user should remain unchanged
 

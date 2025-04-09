@@ -1,0 +1,14 @@
+[
+  {
+    "age":26,
+    "name":"Tester26",
+    "sex":"FEMALE",
+    "zipCode":"1"
+  },
+  {
+    "age":28,
+    "name":"Tester28",
+    "sex":"FEMALE",
+    "zipCode":"ABCDE"
+  }
+]
