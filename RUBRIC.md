@@ -1,40 +1,36 @@
-# Rubric for "Allure Reporting" Task
+# Rubric for "Final Task" 
 
 **Maximum Points: 100**
 
 ### Criteria
 
-1. **Integration of Allure Framework (25 points)**
-   - Correct and complete integration of the Allure framework into the project.
-   - The framework should be fully functional and capable of generating reports.
+1. **Repository Setup and Access (10 points)**
+   - Creation of a GitHub repository, proper upload of code, and granting collaborator access to the trainer.
 
-   - *25 points*: Allure is correctly integrated, and reports are generated without issues.
-   - *13-24 points*: Integration is mostly correct, with minor issues in report generation.
-   - *0-12 points*: Integration is incomplete or incorrect, preventing report generation.
+   - *10 points*: Repository created, code uploaded, and access granted without issues.
+   - *5-9 points*: Repository created with minor issues in uploading code or granting access.
+   - *0-4 points*: Repository not properly set up or access not granted.
 
-2. **Inclusion of Payload in Reports (25 points)**
-   - Accurate inclusion of payload details in the Allure reports.
-   - Payload data should be comprehensive and enhance the understanding of test outcomes.
+2. **Pipeline Configuration in YAML (40 points)**
+   - Correct and complete configuration of the CI/CD pipeline in the YAML file, including deployment, Java installation, code checkout, build, and test execution.
 
-   - *25 points*: Payload is correctly and comprehensively included in all relevant reports.
-   - *13-24 points*: Payload is included but may be incomplete or missing in some reports.
-   - *0-12 points*: Payload is not included or is incorrect, reducing report effectiveness.
+   - *40 points*: Pipeline fully configured with all steps correctly implemented.
+   - *20-39 points*: Pipeline configured with minor errors or missing steps.
+   - *0-19 points*: Incomplete or incorrect pipeline configuration.
 
-3. **Use of Step Annotations (25 points)**
-   - Effective use of `@Step` annotations to improve the readability of the reports.
-   - The steps should be well-organized and clearly displayed in the report.
+3. **Test Execution and Results (30 points)**
+   - Successful execution of tests with both Apache HttpClient and RestAssured, ensuring all tests pass.
 
-   - *25 points*: `@Step` annotations are used effectively, and reports are clear and well-structured.
-   - *13-24 points*: `@Step` annotations are used but may be inconsistent or unclear in some cases.
-   - *0-12 points*: `@Step` annotations are not used, or their use does not improve report readability.
+   - *30 points*: All tests executed and passed successfully with both implementations.
+   - *15-29 points*: Tests executed with some issues, or partial success in passing tests.
+   - *0-14 points*: Tests not executed correctly or significant issues with passing tests.
 
-4. **Annotation of Tests with Known Bugs (25 points)**
-   - Correctly identifying and marking tests associated with known bugs using Allure annotations.
-   - The annotations should be clear and help in tracking and managing known issues.
+4. **Pull Request with Documentation (20 points)**
+   - Creation of a pull request with a `README.md` file that includes links to the green workflows.
 
-   - *25 points*: All tests with known bugs are correctly annotated, with clear indications in the report.
-   - *13-24 points*: Most tests with known bugs are annotated, but some may be missed or incorrectly marked.
-   - *0-12 points*: Tests with known bugs are not annotated or are incorrectly marked, reducing the report's utility.
+   - *20 points*: Pull request created with comprehensive documentation and correct links.
+   - *10-19 points*: Pull request created with minor documentation issues or incorrect links.
+   - *0-9 points*: Pull request not created or missing significant documentation.
 
-### Final Grade: 
+### Final Grade:
 - Total points = [___/100]
