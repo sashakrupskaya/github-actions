@@ -1,47 +1,61 @@
-# Task 80: Allure Reporting
+# Task 100: Final Task
 
-**Deadline:** 5 days
+**Deadline:** 1 day
 
 ### Prerequisites
 
-Before starting this task, make sure to review the following resources:
+Before starting this task, make sure to thoroughly review the following resources:
 
-- **[Allure Report Documentation](https://allurereport.org/docs/):** Understand how Allure Report works, how to integrate it with your testing framework, and how to use its features effectively.
-- **[HttpClient Tutorial - Chapter 1.5: Exception Handling](https://hc.apache.org/httpcomponents-client-4.5.x/current/tutorial/html/fundamentals.html#d5e279):** Gain a deep understanding of how to handle exceptions in HTTP protocol processing.
+- **[GitHub Actions Documentation](https://docs.github.com/en/actions/writing-workflows):** Learn how to create and manage workflows using GitHub Actions, automate CI/CD processes, and understand workflow syntax.
+- **[GitHub Actions - Введение в CI/CD (Video)](https://www.youtube.com/watch?v=e0A2hDObLmg):** Watch this video to get an introduction to CI/CD with GitHub Actions.
 
 ### Task Description
 
-Complete the following tasks to enhance the reporting capabilities of your project using the Allure framework:
+This is the final task of your training, and it involves setting up a CI/CD pipeline using GitHub Actions. Follow the steps below to complete the task:
 
-1. **Add Allure Framework to the Project:**
-   - Integrate the Allure framework into your testing project to enable advanced reporting features.
+1. **Create a GitHub Account:**
+   - If you don't already have a GitHub account, create one. If you have an existing account, log in.
 
-2. **Enhance Test Reports:**
-   - Add payload details to each test in the Allure report to provide comprehensive data for analysis.
-   - Use the `@Step` annotation to improve the readability and structure of the test reports by breaking down the test logic into clearly defined steps.
+2. **Provide Collaborator Access:**
+   - Grant your trainer the "Collaborator" role on your GitHub repository.
 
-3. **Mark Tests with Bugs:**
-   - Identify any tests that are linked to known bugs and use the corresponding Allure annotations to highlight these in the report.
+3. **Create a New Repository:**
+   - Create a new repository on GitHub and upload your existing code with the automated tests.
 
-### Requirements
+4. **Set Up a Workflow:**
+   - Navigate to the "Actions" tab in your repository and select "New workflow" followed by "Set up a workflow yourself." This will create a YAML file in your repository where you will define the pipeline steps.
 
-**Task 1: Integrate Allure Framework**
+5. **Configure the Pipeline:**
+   - In the YAML file, describe the pipeline with the following steps:
+     - Deploy the API image to a GitHub-hosted runner using Ubuntu (`ubuntu-latest`).
+     - Install Java.
+     - Install Maven or Gradle.
+     - Check out your code from the repository.
+     - Build your framework.
+     - Execute the tests against the deployed application.
+     - Publish the HTML test results using a suitable GitHub Action.
 
-- **Objective**: Successfully integrate the Allure framework into the existing project.
-- **Expected Outcome**: The project should be capable of generating Allure reports after test execution.
+6. **Run Tests:**
+   - Execute your current Apache HttpClient tests and ensure all tests pass (green).
+   - Switch the implementation to use RestAssured, run the tests again, and ensure all tests pass (green).
 
-**Task 2: Add Payload Details to Reports**
+7. **Create a Pull Request:**
+   - Create a pull request that includes a `README.md` file with links to the green workflow results from both test executions.
 
-- **Objective**: Include payload information in the Allure reports for each test.
-- **Expected Outcome**: The Allure report should display the payload data associated with each test, allowing for detailed analysis.
+### YAML Information
 
-**Task 3: Improve Report Readability with Step Annotations**
+In step 5, the pipeline described in the YAML file should include:
 
-- **Objective**: Utilize the `@Step` annotation to organize the report by breaking down each test into its constituent steps.
-- **Expected Outcome**: The Allure report should clearly display the steps involved in each test, enhancing the report's clarity and readability.
+- Deploy API image:
+  ```bash
+  docker pull coherentsolutions/rest-training:2.0
+  docker run -d -p 8082:8082 coherentsolutions/rest-training:2.0
+```
+(Ensure the port number matches the one used in your framework)
 
-**Task 4: Annotate Tests with Known Bugs**
-
-- **Objective**: Mark tests that are related to known bugs using the appropriate Allure annotations.
-- **Expected Outcome**: The Allure report should clearly indicate tests associated with known bugs, making it easier to track issues.
-
+- Check out the code from the GitHub repository.
+- Build the testing framework.
+- Execute tests against the deployed application.
+- Publish HTML test results:
+   - For TestNg/JUnit: Publish Test Results
+   - For Allure Report: Allure GitHub Integration
