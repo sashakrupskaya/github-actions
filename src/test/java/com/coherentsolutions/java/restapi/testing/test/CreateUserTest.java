@@ -1,15 +1,25 @@
-package com.coherentsolutions.java.restapi.testing;
+package com.coherentsolutions.java.restapi.testing.test;
+
+
+import com.coherentsolutions.java.restapi.testing.client.HttpResponse;
+import com.coherentsolutions.java.restapi.testing.client.OAuthClient;
+import com.coherentsolutions.java.restapi.testing.client.TestConfig;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+
+import io.qameta.allure.*;
+import org.junit.jupiter.api.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
+
 
 public class CreateUserTest {
     private OAuthClient client;
@@ -29,6 +39,11 @@ public class CreateUserTest {
     public void closeUp() throws IOException {client.shutdown();}
 
     @Test
+    @Tag("smoke")
+    @Issue("8")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Create User - API Test")
+    @Description("Creates a user and verifies status code and response")
     public void createUser() throws IOException {
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         HttpResponse getZipCodes = client.sendGetRequest(ZIP_CODES_URL);
@@ -52,6 +67,10 @@ public class CreateUserTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Create User when change fields order in the request - API Test")
+    @Description("Creates a user and verifies the user is created when change the fields order inside request")
     public void createUserWhenChangeTheFieldsOrder() throws IOException {
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         HttpResponse getZipCodes = client.sendGetRequest(ZIP_CODES_URL);
@@ -74,6 +93,11 @@ public class CreateUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("5")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Get 409 status code when send only Name inside request - API Test")
+    @Description("Verifies the status code and response when only Name is sent")
     public void sendNameOnly() throws IOException {
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         HttpResponse createUser = client.sendWriteRequest(USERS_URL, "POST", "{\n" +
@@ -93,6 +117,11 @@ public class CreateUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("5")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Get 409 status code when send only Sex inside request - API Test")
+    @Description("Verifies the status code and response when only Sex is sent")
     public void sendSexOnly() throws IOException {
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         HttpResponse createUser = client.sendWriteRequest(USERS_URL, "POST", "{\n" +
@@ -112,6 +141,10 @@ public class CreateUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Get 409 status code when send an empty body in request - API Test")
+    @Description("Verifies the status code and response when an empty body is sent")
     public void sendEmptyBody() throws IOException {
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         HttpResponse createUser = client.sendWriteRequest(USERS_URL, "POST", "{}");
@@ -128,6 +161,11 @@ public class CreateUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("6")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Create User by sending only required fields in request - API Test")
+    @Description("Creates a user and verifies the user is created when only required fields were sent")
     public void createUserWhenSendOnlyRequiredFields() throws IOException {
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         HttpResponse createUser = client.sendWriteRequest(USERS_URL, "POST", "{\n" +
@@ -143,6 +181,10 @@ public class CreateUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Get 424 status code by sending incorrect Zip code in request - API Test")
+    @Description("Verifies the status code and response when incorrect Zip code is sent")
     public void createUserWhenIncorrectZipCode() throws IOException {
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         logger.info("No users added so far: " + getUsers.getBody());
@@ -166,6 +208,10 @@ public class CreateUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Get 424 status code by sending unavailable Zip code in request - API Test")
+    @Description("Verifies the status code and response when unavailable Zip code is sent")
     public void createUserWhenUnavailableZipCode() throws IOException {
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         logger.info("No users added so far: " + getUsers.getBody());
@@ -192,6 +238,11 @@ public class CreateUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("7")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Get 400 status code by trying to create a user with the same credentials - API Test")
+    @Description("Verifies the status code and response when trying to create a user with the same credentials")
     public void createUsersWithEqualCredentials() throws IOException {
         HttpResponse getZipCodes = client.sendGetRequest(ZIP_CODES_URL);
         logger.info("The list of zip codes: " + getZipCodes.getBody());
@@ -220,6 +271,11 @@ public class CreateUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("9")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Create several users at a time - API Test")
+    @Description("Creates several users and verifies the POST and GET responses (GET response is for confirmation user is created)")
     public void createSeveralUsersAtOnce() throws IOException {
         HttpResponse createUsers = client.sendWriteRequest(USERS_URL, "POST",
                 "[{\"name\":\"Tester25\",\"age\":25,\"sex\":\"MALE\",\"zipCode\":\"23456\"},{\"name\":\"Tester87\",\"age\":87,\"sex\":\"MALE\",\"zipCode\":\"12345\"},{\"name\":\"Tester71\",\"age\":71,\"sex\":\"FEMALE\",\"zipCode\":\"ABCDE\"}]"

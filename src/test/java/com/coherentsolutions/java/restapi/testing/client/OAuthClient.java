@@ -1,7 +1,9 @@
-package com.coherentsolutions.java.restapi.testing;
+package com.coherentsolutions.java.restapi.testing.client;
 
+import com.coherentsolutions.java.restapi.testing.allure.AllureLogger;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.Step;
 import org.apache.hc.client5.http.classic.methods.*;
 
 import org.apache.hc.client5.http.entity.mime.FileBody;
@@ -9,6 +11,8 @@ import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.*;
+//import org.apache.hc.core5.http.HttpResponse;
+import com.coherentsolutions.java.restapi.testing.client.HttpResponse;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.slf4j.Logger;
@@ -129,6 +133,7 @@ public class OAuthClient {
     }
 
     // Send a GET request with the read token
+    @Step("Send GET request")
     public HttpResponse sendGetRequest(String url) throws IOException {
 
         HttpGet getRequest = new HttpGet(url);
@@ -137,12 +142,15 @@ public class OAuthClient {
         return httpClient.execute(getRequest, response -> {
             int statusCode = response.getCode();
             String responseBody = EntityUtils.toString(response.getEntity());
+            AllureLogger.attachText("Response Status Code", String.valueOf(statusCode));
+            AllureLogger.attachJson("Response Body", responseBody);
             return new HttpResponse(statusCode, responseBody);
         });
     }
 
 
     // Send a POST, PUT, PATCH, or DELETE request with the write token
+    @Step("Send POST/PUT/PATCH/DELETE request")
     public HttpResponse sendWriteRequest(String url, String method, String body) throws IOException {
         HttpUriRequestBase request;
         switch (method.toUpperCase()) {
@@ -172,10 +180,13 @@ public class OAuthClient {
         return httpClient.execute(request, response -> {
             int statusCode = response.getCode();
             String responseBody = response.getEntity() != null ? EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8) : null;
+            AllureLogger.attachText("Response Status Code", String.valueOf(statusCode));
+            AllureLogger.attachJson("Response Body", responseBody);
             return new HttpResponse(statusCode, responseBody);
         });
     }
     // Send a POST request to upload file with the write token
+    @Step("Send POST request for upload a file")
     public HttpResponse uploadJsonFile(String url, File jsonFile) throws Exception {
         if (!jsonFile.exists()) {
             throw new IOException("No files provided for upload: " + jsonFile.getPath());
@@ -192,6 +203,8 @@ public class OAuthClient {
         return httpClient.execute(request, response -> {
             int statusCode = response.getCode();
             String responseBody = response.getEntity() != null ? EntityUtils.toString(response.getEntity(), StandardCharsets.UTF_8) : null;
+            AllureLogger.attachText("Response Status Code", String.valueOf(statusCode));
+            AllureLogger.attachJson("Response Body", responseBody);
             return new HttpResponse(statusCode, responseBody);
         });
     }
@@ -199,7 +212,7 @@ public class OAuthClient {
         httpClient.close();
         logger.info("The client is closed.");
     }
-    void restartDockerContainer() throws IOException, InterruptedException {
+    public void restartDockerContainer() throws IOException, InterruptedException {
         logger.info("Starting to restart the container.");
         new ProcessBuilder("docker", "stop", "nostalgic_haibt").start().waitFor();
         new ProcessBuilder("docker", "start", "nostalgic_haibt").start().waitFor();

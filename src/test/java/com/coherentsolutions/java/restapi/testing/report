@@ -3,7 +3,7 @@ o	Actual result
 o	Expected result
 o	Logs from the web service (if available)
 
-Bug #1
+Bug #1 (task 20: Get Zip Code)
 201 status code is from the get request
 
 Precondition: as a verified user
@@ -13,7 +13,7 @@ Steps to Reproduce:
 Actual result: 201 status code is returned, where list of zip codes: ["12345","23456","ABCDE"]
 Expected result: Should get 200 status code and available zip codes should return list ["12345","23456","ABCDE"]
 
-Bug #2
+Bug #2 (task 20: Get Zip Code)
 Duplicates of available zip codes are added to the codes
 
 Precondition: as a verified user
@@ -25,7 +25,7 @@ Steps to Reproduce:
 Actual result: 201 status code is returned, duplicates are added
 Expected result: 201 status code is returned, and the zip codes should be added to the available zip codes without any duplications
 
-Bug #3
+Bug #3 (task 20: Get Zip Code)
 Invalid parameters can be sent to the server without any error
 
 Precondition: as a verified user
@@ -47,7 +47,7 @@ case 3:
 Actual result: 201 status code is returned, array[string] is received, where null is among the strings in array
 Expected result: Should be an error message shown
 
-Bug #4
+Bug #4 (task 20: Get Zip Code)
 Zip codes are not unique: Duplicates of already used zip codes are added to the available codes
 
 Precondition: as a verified user
@@ -333,7 +333,7 @@ Steps to Reproduce:
 Actual result:
     1. zip code is incorrect - {"timestamp":1744144401489,"status":500,"error":"Internal Server Error","message":"","path":"/users/upload"}, previously created user is removed
     2. zip code is unavailable - 201 status code, Body: Number of users = 1, user is replaced
-    3. zip code is unavailable, where /json file has body - 2 users with the same already used zip code
+    3. zip code is unavailable, where .json file has body - 2 users with the same already used zip code
     [
       {
         "age":26,
