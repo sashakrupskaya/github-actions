@@ -1,16 +1,22 @@
-package com.coherentsolutions.java.restapi.testing;
+package com.coherentsolutions.java.restapi.testing.test;
 
+import com.coherentsolutions.java.restapi.testing.client.HttpResponse;
+import com.coherentsolutions.java.restapi.testing.client.OAuthClient;
+import com.coherentsolutions.java.restapi.testing.client.TestConfig;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.Description;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class ZipCodeTest {
     private OAuthClient client;
@@ -33,6 +39,11 @@ public class ZipCodeTest {
     public void closeUp() throws IOException {client.shutdown();}
 
     @Test
+    @Tag("smoke")
+    @Issue("1")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Get available Zip codes - API Test")
+    @Description("Verifies status code and response")
     public void getAvailableZipCodes() throws IOException {
         HttpResponse getZipCodes = client.sendGetRequest(ZIP_CODES_URL);
         assertAll(
@@ -42,6 +53,10 @@ public class ZipCodeTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Add new Zip codes - API Test")
+    @Description("Verifies status code and response")
     public void addNewZipCodes() throws IOException {
         HttpResponse getZipCodes = client.sendGetRequest(ZIP_CODES_URL);
         assertFalse(getZipCodes.getBody().contains("9"), "Not existing code.");
@@ -55,6 +70,11 @@ public class ZipCodeTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("2")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Add duplicated Zip codes - API Test")
+    @Description("Verifies status code and response, only unique codes should be added")
     public void addDuplicatedZipCodes() throws IOException {
         HttpResponse getZipCodes = client.sendGetRequest(ZIP_CODES_URL);
         assertTrue(getZipCodes.getBody().contains("12345"), "Existing code.");
@@ -68,6 +88,11 @@ public class ZipCodeTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("4")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Add duplicated already used Zip codes - API Test")
+    @Description("Verifies status code and response")
     public void addDuplicatedAlreadyUsedZipCodes() throws IOException, InterruptedException {
         HttpResponse getZipCodes = client.sendGetRequest(ZIP_CODES_URL);
         logger.info("List of zip codes: " + getZipCodes.getBody());
@@ -91,6 +116,11 @@ public class ZipCodeTest {
         assertFalse(addDuplicatedInUseZipCodes.getBody().contains("23456"), "Zip code should not be added because it is in use.");
     }
     @Test
+    @Tag("smoke")
+    @Issue("3")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to send an empty array - API Test")
+    @Description("Gets 400 status code and verifies response")
     public void sendEmptyArrayToAddNewZipCode() throws IOException {
         HttpResponse response = client.sendWriteRequest(ZIP_CODES_EXPAND_URL, "POST", "[]");
         assertAll(
@@ -109,6 +139,11 @@ public class ZipCodeTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("3")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to send an integer inside an array - API Test")
+    @Description("Gets 400 status code and verifies response")
     public void sendIntToAddNewZipCode() throws IOException {
         HttpResponse response = client.sendWriteRequest(ZIP_CODES_EXPAND_URL, "POST", "[777]");
         assertAll(
@@ -128,6 +163,11 @@ public class ZipCodeTest {
     }
 
     @Test
+    @Tag("smoke")
+    @Issue("3")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to send null inside an array - API Test")
+    @Description("Gets 400 status code and verifies response")
     public void sendNullToAddNewZipCode() throws IOException {
         HttpResponse response = client.sendWriteRequest(ZIP_CODES_EXPAND_URL, "POST", "[null]");
         assertAll(
@@ -146,6 +186,10 @@ public class ZipCodeTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to send an empty object - API Test")
+    @Description("Gets 400 status code and verifies response")
     public void sendEmptyObjectToAddNewZipCode() throws IOException {
         HttpResponse response = client.sendWriteRequest(ZIP_CODES_EXPAND_URL, "POST", "{}");
          assertAll(

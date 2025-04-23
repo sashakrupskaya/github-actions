@@ -1,4 +1,4 @@
-package com.coherentsolutions.java.restapi.testing;
+package com.coherentsolutions.java.restapi.testing.client;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class TestConfig {
      * loads the configuration properties from a file
      */
     static {
-        String propsFilePath = System.getProperty("configFilePath", "src/main/resources/conf.properties");
+        String propsFilePath = System.getProperty("configFilePath", "src/test/resources/conf.properties");
         try (FileInputStream input = new FileInputStream(propsFilePath)) {
             config.load(input);
             logger.info("Properties loaded successfully from " + propsFilePath);

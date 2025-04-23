@@ -1,10 +1,19 @@
-package com.coherentsolutions.java.restapi.testing;
+package com.coherentsolutions.java.restapi.testing.test;
 
+import com.coherentsolutions.java.restapi.testing.client.HttpResponse;
+import com.coherentsolutions.java.restapi.testing.client.OAuthClient;
+import com.coherentsolutions.java.restapi.testing.client.TestConfig;
+import com.coherentsolutions.java.restapi.testing.user.Sex;
+import com.coherentsolutions.java.restapi.testing.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.Description;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+
+import org.junit.jupiter.api.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +21,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class DeleteUserTest {
     private OAuthClient client;
@@ -42,6 +52,11 @@ public class DeleteUserTest {
     }
 
     @Test
+    @Tag("smoke")
+    @Issue("16")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Delete User - API Test")
+    @Description("Deletes a specified user and verifies status code and response")
     public void testDeleteUser() throws IOException {
         User userToDelete = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         User userToRemain = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
@@ -68,6 +83,11 @@ public class DeleteUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("18")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Delete User when only required fields are provided in the request - API Test")
+    @Description("Deletes a user (only required fields are sent) and verifies status code and response")
     public void testDeleteUserWithOnlyRequiredFields() throws IOException {
         User userToDelete = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToDelete);
@@ -91,6 +111,11 @@ public class DeleteUserTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("18")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Delete User when Age is missed in request - API Test")
+    @Description("Deletes a user (Age is missed) and verifies status code and response")
     public void testDeleteUserWithMissingAge() throws IOException {
         User userToDelete = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToDelete);
@@ -115,6 +140,11 @@ public class DeleteUserTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("18")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Delete User when Zip code is missed in request - API Test")
+    @Description("Deletes a user (Zip cod is missed) and verifies status code and response")
     public void testDeleteUserWithMissingZipCode() throws IOException {
         User userToDelete = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToDelete);
@@ -139,6 +169,11 @@ public class DeleteUserTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("17")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Get 404 status code when try to delete not created user - API Test")
+    @Description("Verifies the status code and response when tries to delete not existing user")
     public void testDeleteUserWhenNoUsersCreated() throws IOException {
         User userToDelete = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
 
@@ -159,6 +194,11 @@ public class DeleteUserTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("17")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Get 409 status code when try to delete user, provided empty body request - API Test")
+    @Description("Verifies the status code and response when sends DELETE request with an empty body")
     public void testDeleteUserWithEmptyBodyRequest() throws IOException {
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
         logger.info("Created users: " + getUsers.getBody());
@@ -174,6 +214,11 @@ public class DeleteUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("19")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Get 409 status code when try to delete user, Name is missed in request - API Test")
+    @Description("Verifies the status code and response when sends DELETE request with no Name")
     public void testDeleteUserWithMissingName() throws IOException {
         User userToDelete = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToDelete);
@@ -196,6 +241,11 @@ public class DeleteUserTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("19")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Get 409 status code when try to delete user, Sex is missed in request - API Test")
+    @Description("Verifies the status code and response when sends DELETE request with no Sex")
     public void testDeleteUserWithMissingSex() throws IOException {
         User userToDelete = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToDelete);
@@ -218,7 +268,11 @@ public class DeleteUserTest {
         );
     }
     @Test
-    public void testDeleteUserWithMissingAgeAndZipCode() throws IOException {
+    @Tag("smoke")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Get 409 status code when try to delete user, Name and Sex are missed in request - API Test")
+    @Description("Verifies the status code and response when sends DELETE request with no Name and Sex")
+    public void testDeleteUserWithMissingNameAndSex() throws IOException {
         User userToDelete = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToDelete);
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);

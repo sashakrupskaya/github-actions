@@ -1,4 +1,4 @@
-package com.coherentsolutions.java.restapi.testing;
+package com.coherentsolutions.java.restapi.testing.client;
 
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
 

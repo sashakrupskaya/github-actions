@@ -1,4 +1,4 @@
-package com.coherentsolutions.java.restapi.testing;
+package com.coherentsolutions.java.restapi.testing.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

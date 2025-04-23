@@ -1,5 +1,6 @@
-package com.coherentsolutions.java.restapi.testing;
+package com.coherentsolutions.java.restapi.testing.test;
 
+import com.coherentsolutions.java.restapi.testing.client.TestConfig;
 import org.junit.jupiter.api.Test;
 
 

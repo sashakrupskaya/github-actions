@@ -1,10 +1,19 @@
-package com.coherentsolutions.java.restapi.testing;
+package com.coherentsolutions.java.restapi.testing.test;
 
+import com.coherentsolutions.java.restapi.testing.client.HttpResponse;
+import com.coherentsolutions.java.restapi.testing.client.OAuthClient;
+import com.coherentsolutions.java.restapi.testing.client.TestConfig;
+import com.coherentsolutions.java.restapi.testing.user.Sex;
+import com.coherentsolutions.java.restapi.testing.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.Description;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+
+import org.junit.jupiter.api.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class UpdateUserByPutTest {
     private OAuthClient client;
@@ -39,6 +49,11 @@ public class UpdateUserByPutTest {
         client.sendWriteRequest(USERS_URL, "POST", requestBody);
     }
     @Test
+    @Tag("smoke")
+    @Issue("12")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Update User's all values - API Test")
+    @Description("Updates a user and verifies status code and response")
     public void updateUserAllValues() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
@@ -59,6 +74,11 @@ public class UpdateUserByPutTest {
     }
     //zip code is missed
     @Test
+    @Tag("regression")
+    @Issue("13")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Update User's Age, zip code is missed in userNewValues - API Test")
+    @Description("Updates a user and verifies status code and response")
     public void updateAge() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -88,6 +108,11 @@ public class UpdateUserByPutTest {
     }
     //age and zip code are missed
     @Test
+    @Tag("regression")
+    @Issue("13")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Update User's Name, age and zip code are missed in userNewValues - API Test")
+    @Description("Updates a user and verifies status code and response")
     public void updateName() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -116,6 +141,11 @@ public class UpdateUserByPutTest {
     }
     //age and zip code are missed
     @Test
+    @Tag("regression")
+    @Issue("13")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Update User's Sex, age and zip code are missed in userNewValues - API Test")
+    @Description("Updates a user and verifies status code and response")
     public void updateSex() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -144,6 +174,11 @@ public class UpdateUserByPutTest {
     }
     //age is missed
     @Test
+    @Tag("regression")
+    @Issue("13")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Update User's Sex, age is missed in userNewValues - API Test")
+    @Description("Updates a user and verifies status code and response")
     public void updateZipCode() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -173,6 +208,11 @@ public class UpdateUserByPutTest {
     }
 
     @Test
+    @Tag("regression")
+    @Issue("12")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Update User, when userToChange goes first in the request body - API Test")
+    @Description("Updates a user and verifies status code and response")
     public void updateUserWhenChangeUsersOrderInRequestBody() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
@@ -191,6 +231,11 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("12")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Update User, when changed fields order of userNewValues - API Test")
+    @Description("Updates a user and verifies status code and response")
     public void updateUserWhenChangeTheFieldsOrderInNewValues() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -219,6 +264,11 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("12")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Update User, when changed fields order of userToChange - API Test")
+    @Description("Updates a user and verifies status code and response")
     public void updateUserWhenChangeTheFieldsOrderInToChangeValues() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -247,6 +297,11 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("14")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to update a user, when incorrect Zip code in userNewValues - API Test")
+    @Description("Gets 424 status code and verifies initial user is not updated")
     public void updateUserWhenIncorrectZipCode() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of(""));
@@ -265,6 +320,11 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("14")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to update a user, when unavailable Zip code in userNewValues - API Test")
+    @Description("Gets 424 status code and verifies initial user is not updated")
     public void updateUserWhenUnavailableZipCode() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
@@ -284,6 +344,11 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("14")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to update a user, when Name is missed in userNewValues - API Test")
+    @Description("Gets 409 status code and verifies initial user is not updated")
     public void updateUserWhenNameIsMissed() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -313,6 +378,11 @@ public class UpdateUserByPutTest {
     }
 
     @Test
+    @Tag("smoke")
+    @Issue("14")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to update a user, when Sex is missed in userNewValues - API Test")
+    @Description("Gets 409 status code and verifies initial user is not updated")
     public void updateUserWhenSexIsMissed() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -341,6 +411,11 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("14")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to update a user, when Name and Sex are missed in userNewValues - API Test")
+    @Description("Gets 409 status code and verifies initial user is not updated")
     public void updateUserWhenNameAndSexAreMissed() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -368,6 +443,11 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("14")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to update a user, when all values are null in userNewValues - API Test")
+    @Description("Gets 409 status code and verifies initial user is not updated")
     public void updateUserWhenAllNewValuesAreNull() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         User userNewValues = new User(null, null, null, null);
@@ -385,6 +465,11 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("12")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Update User's all values are the same - API Test")
+    @Description("Updates a user and verifies status code and response")
     public void updateUserWithTheSameData() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -401,6 +486,11 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("12")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to update a user, when userToChange does not exist - API Test")
+    @Description("Gets 400 status code and verifies the body")
     public void updateNonExistingUser() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
@@ -417,6 +507,10 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to update a user, when userToChange is null - API Test")
+    @Description("Gets 400 status code and verifies the body")
     public void updateUserWhenUserToChangeIsNull() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);
@@ -441,6 +535,11 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("12")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to update a user, when all values are null in userToChange - API Test")
+    @Description("Gets 400 status code and verifies the body")
     public void updateUserWhenUsersToChangeValuesAreNull() throws IOException {
         User userToChange = new User(null, null, null, null);
         User userNewValues = new User(Optional.of(26), "Tester26", Sex.FEMALE, Optional.of("12345"));
@@ -457,6 +556,10 @@ public class UpdateUserByPutTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to update a user, when all values are null in userNewValues - API Test")
+    @Description("Gets 400 status code and verifies the body")
     public void updateUserWhenUserNewValuesAreNull() throws IOException {
         User userToChange = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToChange);

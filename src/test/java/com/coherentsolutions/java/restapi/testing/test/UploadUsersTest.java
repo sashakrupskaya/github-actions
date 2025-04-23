@@ -1,10 +1,19 @@
-package com.coherentsolutions.java.restapi.testing;
+package com.coherentsolutions.java.restapi.testing.test;
 
+import com.coherentsolutions.java.restapi.testing.client.HttpResponse;
+import com.coherentsolutions.java.restapi.testing.client.OAuthClient;
+import com.coherentsolutions.java.restapi.testing.client.TestConfig;
+import com.coherentsolutions.java.restapi.testing.user.Sex;
+import com.coherentsolutions.java.restapi.testing.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.Description;
+import io.qameta.allure.Issue;
+import io.qameta.allure.Severity;
+import io.qameta.allure.SeverityLevel;
+
+import org.junit.jupiter.api.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +22,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class UploadUsersTest {
     private OAuthClient client;
@@ -43,6 +53,10 @@ public class UploadUsersTest {
         client.sendWriteRequest(USERS_URL, "POST", requestBody);
     }
     @Test
+    @Tag("smoke")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Upload a user - API Test")
+    @Description("Uploads a user and verifies status code and response")
     public void testUploadOneUser() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -66,6 +80,10 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Upload a user, when the code is in one row - API Test")
+    @Description("Uploads a user and verifies status code and response")
     public void testUploadOneUserWrittenInOneRowInsideJsonFile() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -89,6 +107,10 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Upload a user, when fields are reordered inside .json file - API Test")
+    @Description("Uploads a user and verifies status code and response")
     public void testUploadOneUserWithChangedFieldsOrder() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -112,6 +134,10 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Upload a user, when no user is created before uploading - API Test")
+    @Description("Uploads a user and verifies status code and response")
     public void testUploadUserNoUsersCreatedPreviously() throws Exception {
         File case1File = new File("C:\\Users\\AlexandraKrupskaya\\IdeaProjects\\task10-authorization-sashakrupskaya\\src\\test\\resources\\case1.json");
 
@@ -129,6 +155,10 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Upload several users - API Test")
+    @Description("Uploads several users and verifies status code and response")
     public void testUploadSeveralUsers() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -152,6 +182,10 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Upload a user when several users were created previously - API Test")
+    @Description("Uploads a user and verifies status code and response")
     public void testUploadOneUserWhenTwoCreatedPreviously() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -176,6 +210,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("22")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Upload a user with no Age - API Test")
+    @Description("Uploads a user and verifies status code and response")
     public void testUploadUserWithoutAge() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -199,6 +238,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("22")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Upload a user with no Zip code - API Test")
+    @Description("Uploads a user and verifies status code and response")
     public void testUploadUserWithoutZipCode() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -222,6 +266,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("22")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Upload a user with no Age and Zip code - API Test")
+    @Description("Uploads a user and verifies status code and response")
     public void testUploadUserWithoutAgeAndZipCode() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -245,6 +294,10 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to upload an empty .json file - API Test")
+    @Description("Gets 400 status code and verifies response")
     public void testUploadAnEmptyFile() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -268,6 +321,10 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to upload a .json file, when a coma is missed - API Test")
+    @Description("Gets 400 status code and verifies response")
     public void testUploadUserWithMissedComaInJson() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -291,6 +348,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("23")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to upload a .txt file - API Test")
+    @Description("Gets 400 status code and verifies response")
     public void testUploadNonJsonFile() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -314,6 +376,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("20")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to upload a user, when Zip code is incorrect - API Test")
+    @Description("Gets 424 status code and verifies response")
     public void testUploadUserWithIncorrectZipCode() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -336,6 +403,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("20")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to upload two users, when Zip code is incorrect for one user - API Test")
+    @Description("Gets 424 status code and verifies response")
     public void testUploadTwoUsersWithIncorrectZipCode() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -359,6 +431,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("20")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to upload two users, when Zip code is incorrect for both of them - API Test")
+    @Description("Gets 424 status code and verifies response")
     public void testUploadTwoUsersWithIncorrectTwoZipCodes() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -382,6 +459,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("20")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to upload a user, when Zip code is unavailable - API Test")
+    @Description("Gets 424 status code and verifies response")
     public void testUploadUserWithUnavailableZipCode() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -404,6 +486,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("20")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to upload two users, when Zip code is unavailable for one user - API Test")
+    @Description("Gets 424 status code and verifies response")
     public void testUploadTwoUsersWithUnavailableZipCode() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -426,6 +513,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("20")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to upload two users, when Zip code is unavailable for both of them - API Test")
+    @Description("Gets 424 status code and verifies response")
     public void testUploadTwoUsersWithTheSameUnavailableZipCodeForTwo() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -448,6 +540,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("20")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to upload two users, when two different Zip codes are unavailable - API Test")
+    @Description("Gets 424 status code and verifies response")
     public void testUploadTwoUsersWithTwoDifferentUnavailableZipCodes() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -472,6 +569,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("regression")
+    @Issue("20")
+    @Severity(SeverityLevel.NORMAL)
+    @DisplayName("Try to upload two users, when one Zip code is incorrect another is unavailable - API Test")
+    @Description("Gets 424 status code and verifies response")
     public void testUploadTwoUsersWithOneIncorrectAnotherUnavailableZipCode() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -494,6 +596,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("21")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to upload a user with no Name - API Test")
+    @Description("Gets 409 status code and verifies response")
     public void testUploadOneUserWithoutName() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -517,6 +624,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("21")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to upload two users, when one is with no Name - API Test")
+    @Description("Gets 409 status code and verifies response")
     public void testUploadTwoUsersWhereOneWithoutName() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -540,6 +652,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("21")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to upload two users, when both are with no Names - API Test")
+    @Description("Gets 409 status code and verifies response")
     public void testUploadTwoUsersWhereTwoWithoutNames() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -563,6 +680,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("21")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to upload a user with no Sex - API Test")
+    @Description("Gets 409 status code and verifies response")
     public void testUploadOneUserWithoutSex() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -586,6 +708,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("21")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to upload two users, when one is with no Sex - API Test")
+    @Description("Gets 409 status code and verifies response")
     public void testUploadTwoUsersWhereOneWithoutSex() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -609,6 +736,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("21")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to upload two users, when both are with no Sex - API Test")
+    @Description("Gets 409 status code and verifies response")
     public void testUploadTwoUsersWhereBothWithoutSex() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
@@ -632,6 +764,11 @@ public class UploadUsersTest {
         );
     }
     @Test
+    @Tag("smoke")
+    @Issue("21")
+    @Severity(SeverityLevel.CRITICAL)
+    @DisplayName("Try to upload a user, when Name and Sex are missed - API Test")
+    @Description("Gets 409 status code and verifies response")
     public void testUploadOneUserWithoutNameAndSex() throws Exception {
         User userToReplace = new User(Optional.of(INITIAL_AGE), INITIAL_NAME, INITIAL_SEX, Optional.of(INITIAL_ZIP_CODE));
         createUser(userToReplace);
