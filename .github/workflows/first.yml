@@ -4,5 +4,5 @@ jobs:
   print:
     runs-on: ubuntu-latest
     steps:
-      - print: Print to console
+      - name: Print to console
         run: echo Hello
