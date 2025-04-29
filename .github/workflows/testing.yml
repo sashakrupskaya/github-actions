@@ -1,5 +1,7 @@
 name: Test API
-on: push
+on:
+  push:
+    branches: [ final ]
 jobs:
   test:
     runs-on: ubuntu-latest
