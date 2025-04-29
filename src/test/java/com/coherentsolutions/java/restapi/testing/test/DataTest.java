@@ -1,7 +1,8 @@
 package com.coherentsolutions.java.restapi.testing.test;
 
 import com.coherentsolutions.java.restapi.testing.client.TestConfig;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
 
 
 import static org.junit.jupiter.api.Assertions.*;

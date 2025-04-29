@@ -1,25 +1,20 @@
 package com.coherentsolutions.java.restapi.testing.test;
 
-import com.coherentsolutions.java.restapi.testing.client.HttpResponse;
-import com.coherentsolutions.java.restapi.testing.client.OAuthClient;
-import com.coherentsolutions.java.restapi.testing.client.TestConfig;
+import com.coherentsolutions.java.restapi.testing.client.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.qameta.allure.Description;
-import io.qameta.allure.Issue;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ZipCodeTest {
-    private OAuthClient client;
+    private ClientInterface client;
 
     private static final String ZIP_CODES_URL = TestConfig.getZipCodesURL();
     private static final String ZIP_CODES_EXPAND_URL = TestConfig.getZipCodesExpandURL();
@@ -30,7 +25,8 @@ public class ZipCodeTest {
 
     @BeforeEach
     public void setUp() throws IOException, InterruptedException {
-        client = OAuthClient.getInstance();
+        //client = ClientFactory.createClient();
+        client = ClientFactory.createClient(RestAssuredClient.class);
         client.restartDockerContainer();
         client.resetHttpClient();
         client.refreshTokensAfterReset();

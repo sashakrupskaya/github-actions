@@ -1,36 +1,32 @@
 package com.coherentsolutions.java.restapi.testing.test;
 
-
-import com.coherentsolutions.java.restapi.testing.client.HttpResponse;
-import com.coherentsolutions.java.restapi.testing.client.OAuthClient;
-import com.coherentsolutions.java.restapi.testing.client.TestConfig;
-
+import com.coherentsolutions.java.restapi.testing.client.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.qameta.allure.Issue;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
 
 import io.qameta.allure.*;
+
 import org.junit.jupiter.api.*;
+
+import static com.coherentsolutions.java.restapi.testing.allure.AllureLogger.logRequest;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 
 
-public class CreateUserTest {
-    private OAuthClient client;
 
+public class CreateUserTest {
+    private ClientInterface client;
     private static final String ZIP_CODES_URL = TestConfig.getZipCodesURL();
     private static final String USERS_URL = TestConfig.getUsersURL();
     private final ObjectMapper objectMapper = new ObjectMapper();
     protected static final Logger logger = LoggerFactory.getLogger(CreateUserTest.class);
     @BeforeEach
     public void setUp() throws IOException, InterruptedException {
-        client = OAuthClient.getInstance();
+        client = ClientFactory.createClient(RestAssuredClient.class);
         client.restartDockerContainer();
         client.resetHttpClient();
         client.refreshTokensAfterReset();
@@ -46,15 +42,20 @@ public class CreateUserTest {
     @Description("Creates a user and verifies status code and response")
     public void createUser() throws IOException {
         HttpResponse getUsers = client.sendGetRequest(USERS_URL);
+        logRequest(USERS_URL, "GET", "");
         HttpResponse getZipCodes = client.sendGetRequest(ZIP_CODES_URL);
-        HttpResponse createUser = client.sendWriteRequest(USERS_URL, "POST", "{\n" +
+        logRequest(ZIP_CODES_URL, "GET", "");
+        String body = "{\n" +
                 "  \"age\": 25,\n" +
                 "  \"name\": \"Tester25\",\n" +
                 "  \"sex\": \"MALE\",\n" +
-                "  \"zipCode\": \"23456\"\n" + "}"
-        );
+                "  \"zipCode\": \"23456\"\n" + "}";
+        HttpResponse createUser = client.sendWriteRequest(USERS_URL, "POST", body);
+        logRequest(USERS_URL, "POST", body);
         HttpResponse getUsers1 = client.sendGetRequest(USERS_URL);
+        logRequest(USERS_URL, "GET", "");
         HttpResponse getZipCodes1 = client.sendGetRequest(ZIP_CODES_URL);
+        logRequest(ZIP_CODES_URL, "GET", "");
         logger.info("Response body: " + createUser.getBody());
         assertAll(
                 "Grouped Assertions of createUser",

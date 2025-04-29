@@ -1,18 +1,14 @@
 package com.coherentsolutions.java.restapi.testing.test;
 
-import com.coherentsolutions.java.restapi.testing.client.HttpResponse;
-import com.coherentsolutions.java.restapi.testing.client.OAuthClient;
-import com.coherentsolutions.java.restapi.testing.client.TestConfig;
+import com.coherentsolutions.java.restapi.testing.client.*;
 import com.coherentsolutions.java.restapi.testing.user.Sex;
 import com.coherentsolutions.java.restapi.testing.user.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import io.qameta.allure.Description;
-import io.qameta.allure.Issue;
-import io.qameta.allure.Severity;
-import io.qameta.allure.SeverityLevel;
+import io.qameta.allure.*;
 
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +17,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+
 
 
 public class UploadUsersTest {
-    private OAuthClient client;
+    private ClientInterface client;
     private static final String USERS_URL = TestConfig.getUsersURL();
     private static final String USERS_UPLOAD_URL = TestConfig.getUsersUploadURL();
     private final ObjectMapper objectMapper = new ObjectMapper().registerModule(new Jdk8Module());
@@ -37,7 +33,7 @@ public class UploadUsersTest {
 
     @BeforeEach
     public void setUp() throws IOException, InterruptedException {
-        client = OAuthClient.getInstance();
+        client = ClientFactory.createClient(RestAssuredClient.class);
         client.restartDockerContainer();
         client.resetHttpClient();
         client.refreshTokensAfterReset();

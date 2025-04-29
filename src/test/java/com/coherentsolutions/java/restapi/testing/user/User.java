@@ -1,6 +1,5 @@
 package com.coherentsolutions.java.restapi.testing.user;
 
-import com.coherentsolutions.java.restapi.testing.user.Sex;
 
 import java.util.Optional;
 

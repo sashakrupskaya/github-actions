@@ -3,14 +3,16 @@ import io.qameta.allure.Attachment;
 import io.qameta.allure.Step;
 
 public class AllureLogger {
-
-//    @Step("{url} to request {method}")
-//    public static void logRequest(String url, String method, String body) {
-//        attachText("Request Body", body);
-//    }
+    @Step("Request made to {url} with method {method}")
+    public static void logRequest(String url, String method, String body) {
+        attachPlaneText("Request URL and Method", url + " - " + method);
+        if (body != null && !body.isEmpty()) {
+            attachPlaneText("Request Body", body);
+        }
+    }
 
     @Attachment(value = "{name}", type = "text/plain")
-    public static String attachText(String name, String content) {
+    public static String attachPlaneText(String name, String content) {
         return content;
     }
 
