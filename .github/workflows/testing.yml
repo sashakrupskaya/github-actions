@@ -22,8 +22,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-      - name: Ensure Maven wrapper is executable
-        run: chmod +x mvnw
       - name: Deploy API Docker Image
         run: |
           docker pull coherentsolutions/rest-training:2.0
@@ -31,12 +29,12 @@ jobs:
           echo "Waiting for API to be ready"
           sleep 30
       - name: Build with Maven
-        run: ./mvnw clean install
+        run: mvn clean install
       - name: Run Tests
-        run: ./mvnw test
+        run: mvn test
       - name: Generate Allure test report
         if: always()
-        run: ./mvnw allure:report
+        run: mvn allure:report
       - name: Upload Allure report as artifact
         if: always()
         uses: actions/upload-artifact@v4
