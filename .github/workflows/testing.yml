@@ -5,6 +5,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      API-URL: http://localhost:49000
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -16,12 +18,13 @@ jobs:
       - name: Set up Maven
         uses: stCarolas/setup-maven@v5
         with:
-          maven-version: 3.9.6
+          maven-version: 3.8.2
       - name: Deploy API Docker Image
         run: |
           docker pull coherentsolutions/rest-training:2.0
           docker run -d -p 49000:8082 coherentsolutions/rest-training:2.0
-          sleep 15
+          echo "Waiting for API to be ready"
+          sleep 30
       - name: Build with Maven
         run: mvn clean install
       - name: Run Tests
