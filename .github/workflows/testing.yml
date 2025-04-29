@@ -14,7 +14,7 @@ jobs:
       - name: Set up Maven
         uses: stCarolas/setup-maven@v5
         with:
-          maven-version: 3.8.2
+          maven-version: 3.9.6
       - name: Deploy API Docker Image
         run: |
           docker pull coherentsolutions/rest-training:2.0
@@ -24,18 +24,12 @@ jobs:
         run: mvn clean install
       - name: Run Tests
         run: mvn clean test
-      - name: Checkout github pages with previous Allure reports
-        uses: actions/checkout@v4
-        continue-on-error: true
-        with:
-            ref: gh-pages
-            path: gh-pages-dir
       - name: Generate Allure test report
         uses: andgineer/allure-report@v3.5
         id: allure-report
         if: always()
         with:
-            allure-results: allure-results
+            allure-results: target/allure-results
             website: gh-pages-dir
             reports-site-path: builds/tests
       - name: Publish Allure test report
