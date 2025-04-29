@@ -43,8 +43,3 @@ jobs:
         with:
             name: allure-report
             path: target/site/allure-maven-plugin
-          # Optional: Publish Allure HTML report in job summary (for GitHub UI)
-      - name: Upload summary with report link
-        if: always()
-        run: |
-        echo "Allure Report generated in: target/site/allure-maven-plugin/index.html" >> $GITHUB_STEP_SUMMARY
