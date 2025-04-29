@@ -18,7 +18,7 @@ jobs:
       - name: Deploy API Docker Image
         run: |
           docker pull coherentsolutions/rest-training:2.0
-          docker run -d -p 49000:8082 coherentsolutions/rest-training:2.0
+          docker run -d -p 8082:8082 coherentsolutions/rest-training:2.0
           sleep 15
       - name: Build with Maven
         run: mvn clean install
