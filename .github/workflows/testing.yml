@@ -53,9 +53,9 @@ jobs:
             path: target/site/allure-maven-plugin
       - name: Publish Allure report to github
         if: always()
-        uses: mikepenz/action-gh-pages@3
+        uses: mikepenz/action-gh-pages@3.3.0
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: target/site/allure-maven-plugin
+            publish_dir: ./target/site/allure-maven-plugin
             publish_branch: gh-pages
             commit_message: "Publishing Allure report from CI"
