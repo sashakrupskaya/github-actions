@@ -23,7 +23,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
       - name: Run Tests
-        run: mvn test
+        run: mvn clean test
       - name: Checkout github pages with previous Allure reports
         uses: actions/checkout@v4
         continue-on-error: true
