@@ -22,6 +22,10 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
+      - name: Set up Maven
+        uses: stCarolas/setup-maven@5
+        with:
+          maven-version: 3.8.2
       - name: Deploy API Docker Image
         run: |
           docker pull coherentsolutions/rest-training:2.0
