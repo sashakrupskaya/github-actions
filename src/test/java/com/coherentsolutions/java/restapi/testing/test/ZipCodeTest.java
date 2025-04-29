@@ -26,7 +26,7 @@ public class ZipCodeTest {
     @BeforeEach
     public void setUp() throws IOException, InterruptedException {
         //client = ClientFactory.createClient();
-        client = ClientFactory.createClient(RestAssuredClient.class);
+        client = ClientFactory.createClient(ApacheClient.class);
         client.restartDockerContainer();
         client.resetHttpClient();
         client.refreshTokensAfterReset();
