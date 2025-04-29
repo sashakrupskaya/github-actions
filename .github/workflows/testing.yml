@@ -22,10 +22,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-      - name: Set up Maven
-        uses: stCarolas/setup-maven@v5
-        with:
-          maven-version: 3.8.2
+      - name: Ensure Maven wrapper is executable
+        run: chmod +x mvnw
       - name: Deploy API Docker Image
         run: |
           docker pull coherentsolutions/rest-training:2.0
@@ -33,22 +31,20 @@ jobs:
           echo "Waiting for API to be ready"
           sleep 30
       - name: Build with Maven
-        run: mvn clean install
+        run: ./mvnw clean install
       - name: Run Tests
-        run: mvn clean test
+        run: ./mvnw test
       - name: Generate Allure test report
-        uses: andgineer/allure-report@v3.5
-        id: allure-report
         if: always()
+        run: ./mvnw allure:report
+      - name: Upload Allure report as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
         with:
-            allure-results: target/allure-results
-            website: gh-pages-dir
-            reports-site-path: builds/tests
-      - name: Publish Allure test report
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ always() && (steps.allure-report.outcome == 'success') }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ${{ steps.allure-report.outputs.reports-site }}
-          destination_dir: ${{ steps.allure-report.outputs.reports-site-path }}
+            name: allure-report
+            path: target/site/allure-maven-plugin
+          # Optional: Publish Allure HTML report in job summary (for GitHub UI)
+      - name: Upload summary with report link
+        if: always()
+        run: |
+        echo "Allure Report generated in: target/site/allure-maven-plugin/index.html" >> $GITHUB_STEP_SUMMARY
