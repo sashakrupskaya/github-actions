@@ -6,7 +6,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      API_URL: http://localhost:49000
+      TOKEN_ENDPOINT: ${{ secrets.TOKEN_ENDPOINT }}
+      USERNAME2: ${{ secrets.USERNAME2 }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      grantType: ${{ secrets.GRANT_TYPE }}
+      zipCodesURL: ${{ secrets.ZIP_CODES_URL }}
+      zipCodesExpandURL: ${{ secrets.ZIP_CODES_EXPAND_URL }}
+      usersURL: ${{ secrets.USERS_URL }}
+      usersUploadURL: ${{ secrets.USERS_UPLOAD_URL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -28,7 +35,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
       - name: Run Tests
-        run: mvn clean test -DAPI_URL=http://localhost:49000
+        run: mvn clean test
       - name: Generate Allure test report
         uses: andgineer/allure-report@v3.5
         id: allure-report
