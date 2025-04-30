@@ -9,11 +9,6 @@ jobs:
       TOKEN_ENDPOINT: ${{ secrets.TOKENENDPOINT }}
       USERNAME2: ${{ secrets.USERNAME2 }}
       PASSWORD: ${{ secrets.PASSWORD }}
-      grantType: ${{ secrets.GRANTTYPE }}
-      zipCodesURL: ${{ secrets.ZIPCODESURL }}
-      zipCodesExpandURL: ${{ secrets.ZIPCODESEXPANDURL }}
-      usersURL: ${{ secrets.USERSURL }}
-      usersUploadURL: ${{ secrets.USERSUPLOADURL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
