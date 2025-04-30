@@ -29,23 +29,24 @@ jobs:
           sleep 30
       - name: Build with Maven
         run: mvn clean install -DskipTests
-      - name: Run tests
+      - name: Run Tests
         run: mvn test -Dsurefire.testFailureIgnore=true
-      - name: Publish junit test results
+      - name: Publish Junit Test Results
         if: always()
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: junit-results
           path: target/surefire-reports
       - name: Generate Allure Report
         if: always()
         run: mvn allure:report
-      - name: Upload allure report
+      - name: Upload Allure Report
         if: always()
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
+          name: allure-report
           path: target/site/allure-maven-plugin
-      - name: Deploy report to GitHub Pages
+      - name: Deploy Allure Report to GitHub Pages
         if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
