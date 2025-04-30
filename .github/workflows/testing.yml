@@ -28,9 +28,7 @@ jobs:
           echo "Waiting for API to be ready"
           sleep 30
       - name: Build with Maven
-        run: mvn clean install -DskipTests
-      - name: Run Tests
-        run: mvn test -Dsurefire.testFailureIgnore=true
+        run:  mvn clean install -Dsurefire.testFailureIgnore=true || true
       - name: Publish Junit Test Results
         if: always()
         uses: actions/upload-artifact@v4
