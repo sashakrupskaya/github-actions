@@ -6,7 +6,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      TOKEN_ENDPOINT: ${{ secrets.TOKENENDPOINT }}
+      TOKEN_ENDPOINT: ${{ secrets.TOKEN_ENDPOINT }}
       USERNAME2: ${{ secrets.USERNAME2 }}
       PASSWORD: ${{ secrets.PASSWORD }}
     steps:
