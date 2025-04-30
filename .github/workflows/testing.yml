@@ -6,14 +6,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      TOKEN_ENDPOINT: ${{ secrets.TOKEN_ENDPOINT }}
+      TOKEN_ENDPOINT: ${{ secrets.TOKENENDPOINT }}
       USERNAME2: ${{ secrets.USERNAME2 }}
       PASSWORD: ${{ secrets.PASSWORD }}
-      grantType: ${{ secrets.GRANT_TYPE }}
-      zipCodesURL: ${{ secrets.ZIP_CODES_URL }}
-      zipCodesExpandURL: ${{ secrets.ZIP_CODES_EXPAND_URL }}
-      usersURL: ${{ secrets.USERS_URL }}
-      usersUploadURL: ${{ secrets.USERS_UPLOAD_URL }}
+      grantType: ${{ secrets.GRANTTYPE }}
+      zipCodesURL: ${{ secrets.ZIPCODESURL }}
+      zipCodesExpandURL: ${{ secrets.ZIPCODESEXPANDURL }}
+      usersURL: ${{ secrets.USERSURL }}
+      usersUploadURL: ${{ secrets.USERSUPLOADURL }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
