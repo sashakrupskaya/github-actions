@@ -31,7 +31,7 @@ jobs:
         run: mvn clean install
       - name: Publish junit test results
         if: always()
-        uses: actions/checkout@v4
+        uses: upload-pages-artifact@v3
         with:
           name: junit-results
           path: target/surefire-reports
