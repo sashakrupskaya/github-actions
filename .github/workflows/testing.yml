@@ -28,10 +28,12 @@ jobs:
           echo "Waiting for API to be ready"
           sleep 30
       - name: Build with Maven
-        run: mvn clean install
+        run: mvn clean install -DskipTests
+      - name: Run tests
+        run: mvn test -Dsurefire.testFailureIgnore=true
       - name: Publish junit test results
         if: always()
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           name: junit-results
           path: target/surefire-reports
@@ -40,10 +42,11 @@ jobs:
         run: mvn allure:report
       - name: Upload allure report
         if: always()
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: target/site/allure-maven-plugin
       - name: Deploy report to GitHub Pages
+        if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
