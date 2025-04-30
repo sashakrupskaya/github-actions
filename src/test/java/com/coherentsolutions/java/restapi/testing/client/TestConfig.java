@@ -46,8 +46,6 @@ public class TestConfig {
         logger.error("Missing required property: {}", key);
         throw new IllegalStateException("Missing required property: " + key);
     }
-
-    // Accessors remain unchanged (examples):
     public static String getTokenEndpoint() { return getProperty("TOKEN_ENDPOINT"); }
     public static String getUserName() { return getProperty("USERNAME2"); }
     public static String getPassword() { return getProperty("PASSWORD"); }

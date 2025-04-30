@@ -29,3 +29,19 @@ jobs:
           sleep 30
       - name: Build with Maven
         run: mvn clean install
+      - name: Run Tests
+        run: mvn test
+      - name: Publish junit test results
+        if: always()
+        uses: actions/checkout@v4
+        with:
+          name: junit-results
+          path: target/surefire-reports
+      - name: Generate Allure Report
+        if: always()
+        run: mvn allure:report
+      - name: Upload allure report
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: target/site/allure-maven-plugin
