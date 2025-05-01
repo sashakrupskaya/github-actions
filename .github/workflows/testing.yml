@@ -37,7 +37,7 @@ jobs:
           path: target/surefire-reports
       - name: Generate Allure Report
         if: always()
-        run: mvn allure:report
+        run: mvn allure:report --single-file
       - name: Upload Allure Report
         if: always()
         uses: actions/upload-artifact@v4
