@@ -33,7 +33,7 @@ public class DeleteUserTest {
 
     @BeforeEach
     public void setUp() throws IOException, InterruptedException {
-        client = ClientFactory.createClient(ApacheClient.class);
+        client = ClientFactory.createClient(RestAssuredClient.class);
         client.restartDockerContainer();
         client.resetHttpClient();
         client.refreshTokensAfterReset();
