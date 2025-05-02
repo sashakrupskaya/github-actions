@@ -40,14 +40,6 @@ jobs:
           name: junit-results
           path: target/surefire-reports
 
-      - name: Load Test Report History
-        uses: actions/checkout@v4
-        if: always()
-        continue-on-error: true
-        with:
-            ref: gh-pages
-            path: gh-pages
-
       - name: Build Test Report
         uses: simple-elf/allure-report-action@v1.7
         if: always()
