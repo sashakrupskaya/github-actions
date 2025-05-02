@@ -1,6 +1,0 @@
-{
-  "age": 25,
-  "name": "Tester25",
-  "sex": "MALE",
-  "zipCode": "23456"
-}
