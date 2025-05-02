@@ -1,0 +1,46 @@
+<div>PATCH to http://localhost:49000/users</div>
+
+    <h4>Body</h4>
+    <div>
+    <pre class="preformated-text">
+{
+    &quot;userNewValues&quot;: {
+        &quot;name&quot;: &quot;Tester25&quot;,
+        &quot;sex&quot;: &quot;MALE&quot;,
+        &quot;zipCode&quot;: &quot;12345&quot;
+    },
+    &quot;userToChange&quot;: {
+        &quot;age&quot;: 25,
+        &quot;name&quot;: &quot;Tester25&quot;,
+        &quot;sex&quot;: &quot;MALE&quot;,
+        &quot;zipCode&quot;: &quot;23456&quot;
+    }
+}    </pre>
+    </div>
+
+    <h4>Headers</h4>
+    <div>
+            <div>Authorization: Bearer daf2519f-2e20-4a7c-ad7c-ad43c9b4abec</div>
+            <div>Accept: */*</div>
+            <div>Content-Type: application/json</div>
+    </div>
+
+
+
+    <h4>Curl</h4>
+    <div>
+        curl -v -X PATCH &#39;http://localhost:49000/users&#39; -H &#39;Authorization: Bearer daf2519f-2e20-4a7c-ad7c-ad43c9b4abec&#39; -H &#39;Accept: */*&#39; -H &#39;Content-Type: application/json&#39; -d &#39;{
+    &quot;userNewValues&quot;: {
+        &quot;name&quot;: &quot;Tester25&quot;,
+        &quot;sex&quot;: &quot;MALE&quot;,
+        &quot;zipCode&quot;: &quot;12345&quot;
+    },
+    &quot;userToChange&quot;: {
+        &quot;age&quot;: 25,
+        &quot;name&quot;: &quot;Tester25&quot;,
+        &quot;sex&quot;: &quot;MALE&quot;,
+        &quot;zipCode&quot;: &quot;23456&quot;
+    }
+}&#39;
+    </div>
+
