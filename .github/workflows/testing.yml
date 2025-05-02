@@ -40,7 +40,7 @@ jobs:
           name: junit-results
           path: target/surefire-reports
 
-      - name: Load test report history
+      - name: Load Test Report History
         uses: actions/checkout@v4
         if: always()
         continue-on-error: true
@@ -48,15 +48,15 @@ jobs:
             ref: gh-pages
             path: gh-pages
 
-      - name: Build test report
+      - name: Build Test Report
         uses: simple-elf/allure-report-action@v1.7
         if: always()
         with:
             gh_pages: gh-pages
             allure_history: allure-history
-            allure_results: build/allure-results
+            allure_results: target/allure-results
 
-      - name: Publish test report
+      - name: Publish Test Report
         uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
